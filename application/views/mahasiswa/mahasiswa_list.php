@@ -40,50 +40,52 @@
         </div>
     </div>
 
-    <!-- Table content -->
-    <div class="overflow-x-auto">
-        <table class="w-full text-left text-sm text-slate-600 border-collapse" id="mhsTable">
+    <!-- Table layout for Desktop and Tablet (md to lg) -->
+    <div class="hidden md:block overflow-x-auto bg-slate-50/50 p-6 border-b border-slate-100">
+        <table class="w-full text-left text-sm text-slate-600 border-separate border-spacing-y-3" id="mhsTable">
             <thead>
-                <tr class="border-b border-slate-100 text-xs font-bold text-slate-400 uppercase bg-slate-50/50">
-                    <th class="py-4 px-6">Mahasiswa</th>
-                    <th class="py-4 px-4">Jurusan</th>
-                    <th class="py-4 px-4 text-right">Penghasilan Ortu</th>
-                    <th class="py-4 px-4 text-center">Tanggungan</th>
-                    <th class="py-4 px-4">Kontak</th>
-                    <th class="py-4 px-6 text-center">Aksi</th>
+                <tr class="text-xs font-bold text-slate-400 uppercase">
+                    <th class="pb-1 px-6">Mahasiswa</th>
+                    <th class="pb-1 px-4">Jurusan</th>
+                    <th class="pb-1 px-4 text-right">Penghasilan Ortu</th>
+                    <th class="pb-1 px-4 text-center">Tanggungan</th>
+                    <th class="pb-1 px-4">Kontak</th>
+                    <th class="pb-1 px-6 text-center">Aksi</th>
                 </tr>
             </thead>
-            <tbody class="divide-y divide-slate-100">
+            <tbody>
                 <?php if (!empty($mahasiswa_list)): ?>
                     <?php foreach ($mahasiswa_list as $mhs): ?>
-                        <tr class="hover:bg-slate-50/30 transition-colors">
-                            <td class="py-4 px-6 flex items-center space-x-3">
-                                <div class="w-11 h-11 rounded-2xl bg-slate-100 overflow-hidden flex-shrink-0 flex items-center justify-center border border-slate-200">
-                                    <?php if (!empty($mhs['foto']) && file_exists('uploads/' . $mhs['foto'])): ?>
-                                        <img src="<?php echo base_url('uploads/' . $mhs['foto']); ?>" alt="Foto" class="w-full h-full object-cover">
-                                    <?php else: ?>
-                                        <i class="fa-solid fa-user text-slate-400 text-lg"></i>
-                                    <?php endif; ?>
-                                </div>
-                                <div>
-                                    <h4 class="font-bold text-slate-800 tracking-tight leading-snug"><?php echo htmlspecialchars($mhs['nama_lengkap']); ?></h4>
-                                    <p class="text-xs text-slate-400 font-medium">NIM <?php echo htmlspecialchars($mhs['nim']); ?></p>
+                        <tr class="bg-white hover:shadow-md transition-shadow duration-200">
+                            <td class="py-4 pl-6 pr-4 border-y border-l border-slate-200 rounded-l-2xl shadow-sm">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-11 h-11 rounded-2xl bg-slate-100 overflow-hidden flex-shrink-0 flex items-center justify-center border border-slate-200">
+                                        <?php if (!empty($mhs['foto']) && file_exists('uploads/' . $mhs['foto'])): ?>
+                                            <img src="<?php echo base_url('uploads/' . $mhs['foto']); ?>" alt="Foto" class="w-full h-full object-cover">
+                                        <?php else: ?>
+                                            <i class="fa-solid fa-user text-slate-400 text-lg"></i>
+                                        <?php endif; ?>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold text-slate-800 tracking-tight leading-snug"><?php echo htmlspecialchars($mhs['nama_lengkap']); ?></h4>
+                                        <p class="text-xs text-slate-400 font-medium">NIM <?php echo htmlspecialchars($mhs['nim']); ?></p>
+                                    </div>
                                 </div>
                             </td>
-                            <td class="py-4 px-4">
+                            <td class="py-4 px-4 border-y border-slate-200 shadow-sm">
                                 <div class="text-xs font-semibold text-slate-600"><?php echo htmlspecialchars($mhs['jurusan']); ?></div>
                                 <div class="text-[10px] text-slate-400 font-medium">Semester <?php echo $mhs['semester']; ?></div>
                             </td>
-                            <td class="py-4 px-4 text-right font-semibold text-rose-600">
+                            <td class="py-4 px-4 text-right font-semibold text-rose-600 border-y border-slate-200 shadow-sm">
                                 Rp <?php echo number_format($mhs['penghasilan_bulanan'], 0, ',', '.'); ?>
                             </td>
-                            <td class="py-4 px-4 text-center font-bold text-slate-700">
+                            <td class="py-4 px-4 text-center font-bold text-slate-700 border-y border-slate-200 shadow-sm">
                                 <?php echo $mhs['jumlah_tanggungan']; ?> <span class="text-xs font-normal text-slate-400">org</span>
                             </td>
-                            <td class="py-4 px-4 text-xs font-medium text-slate-500">
+                            <td class="py-4 px-4 text-xs font-medium text-slate-500 border-y border-slate-200 shadow-sm">
                                 <?php echo htmlspecialchars($mhs['no_telepon']); ?>
                             </td>
-                            <td class="py-4 px-6 text-center">
+                            <td class="py-4 pl-4 pr-6 text-center border-y border-r border-slate-200 rounded-r-2xl shadow-sm">
                                 <div class="flex items-center justify-center space-x-2.5">
                                     <a href="<?php echo base_url('mahasiswa/detail/' . $mhs['id_mahasiswa']); ?>" 
                                        class="p-2 text-blue-600 hover:bg-blue-50 rounded-xl transition" title="Detail Profil">
@@ -99,7 +101,7 @@
                     <?php endforeach; ?>
                 <?php else: ?>
                     <tr>
-                        <td colspan="6" class="py-12 text-center text-slate-400">
+                        <td colspan="6" class="py-12 text-center text-slate-400 border border-slate-200 rounded-2xl bg-white shadow-sm">
                             <i class="fa-solid fa-folder-open text-4xl mb-3 text-slate-300"></i>
                             <p class="text-xs font-medium">Belum ada data mahasiswa terdaftar.</p>
                         </td>
@@ -107,6 +109,66 @@
                 <?php endif; ?>
             </tbody>
         </table>
+    </div>
+
+    <!-- Card layout for Mobile Only (< md) -->
+    <div class="block md:hidden p-6 bg-slate-50/50 space-y-4" id="mhsCardsContainer">
+        <?php if (!empty($mahasiswa_list)): ?>
+            <?php foreach ($mahasiswa_list as $mhs): ?>
+                <div class="mhs-card p-6 bg-white border border-slate-200 rounded-2xl shadow-sm hover:shadow transition duration-200">
+                    <div class="flex items-center space-x-3 mb-4">
+                        <div class="w-12 h-12 rounded-2xl bg-slate-100 overflow-hidden flex-shrink-0 flex items-center justify-center border border-slate-200">
+                            <?php if (!empty($mhs['foto']) && file_exists('uploads/' . $mhs['foto'])): ?>
+                                <img src="<?php echo base_url('uploads/' . $mhs['foto']); ?>" alt="Foto" class="w-full h-full object-cover">
+                            <?php else: ?>
+                                <i class="fa-solid fa-user text-slate-400 text-lg"></i>
+                            <?php endif; ?>
+                        </div>
+                        <div>
+                            <h4 class="mhs-name font-bold text-slate-800 tracking-tight leading-snug"><?php echo htmlspecialchars($mhs['nama_lengkap']); ?></h4>
+                            <p class="mhs-nim text-xs text-slate-400 font-semibold">NIM <?php echo htmlspecialchars($mhs['nim']); ?></p>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-4 text-xs border-y border-slate-100 py-3 my-3">
+                        <div>
+                            <span class="text-slate-400 block mb-0.5">Jurusan / Sem</span>
+                            <span class="mhs-jurusan font-semibold text-slate-700"><?php echo htmlspecialchars($mhs['jurusan']); ?></span>
+                            <span class="text-slate-400 font-medium">(Smt <?php echo $mhs['semester']; ?>)</span>
+                        </div>
+                        <div>
+                            <span class="text-slate-400 block mb-0.5">Penghasilan Ortu</span>
+                            <span class="font-bold text-rose-600">Rp <?php echo number_format($mhs['penghasilan_bulanan'], 0, ',', '.'); ?></span>
+                            <span class="text-[10px] text-slate-400 block font-medium"><?php echo $mhs['jumlah_tanggungan']; ?> tanggungan</span>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center justify-between mt-3">
+                        <div class="text-xs text-slate-500 font-medium">
+                            <i class="fa-solid fa-phone text-blue-500 mr-1"></i>
+                            <?php echo htmlspecialchars($mhs['no_telepon']); ?>
+                        </div>
+                        <div class="flex space-x-2">
+                            <a href="<?php echo base_url('mahasiswa/detail/' . $mhs['id_mahasiswa']); ?>" 
+                               class="px-3 py-2 text-xs font-semibold text-blue-600 bg-blue-50 hover:bg-blue-100 rounded-xl transition flex items-center space-x-1" title="Detail Profil">
+                                <i class="fa-solid fa-eye"></i>
+                                <span>Detail</span>
+                            </a>
+                            <button onclick="konfirmasiHapus('<?php echo base_url('mahasiswa/delete/' . $mhs['id_mahasiswa']); ?>', '<?php echo htmlspecialchars($mhs['nama_lengkap']); ?>')" 
+                                    class="px-3 py-2 text-xs font-semibold text-rose-600 bg-rose-50 hover:bg-rose-100 rounded-xl transition flex items-center space-x-1" title="Hapus Data">
+                                <i class="fa-solid fa-trash-can"></i>
+                                <span>Hapus</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <div class="py-12 text-center text-slate-400">
+                <i class="fa-solid fa-folder-open text-4xl mb-3 text-slate-300"></i>
+                <p class="text-xs font-medium">Belum ada data mahasiswa terdaftar.</p>
+            </div>
+        <?php endif; ?>
     </div>
 </div>
 
@@ -280,24 +342,50 @@
         const filter = input.value.toUpperCase();
         const select = document.getElementById("filterJurusan");
         const filterJur = select.value.toUpperCase();
+        
+        // 1. Filter Desktop Table Rows
         const table = document.getElementById("mhsTable");
-        const tr = table.getElementsByTagName("tr");
-
-        for (let i = 1; i < tr.length; i++) {
-            let tdMhs = tr[i].getElementsByTagName("td")[0];
-            let tdJur = tr[i].getElementsByTagName("td")[1];
-            
-            if (tdMhs && tdJur) {
-                let txtMhs = tdMhs.textContent || tdMhs.innerText;
-                let txtJur = tdJur.textContent || tdJur.innerText;
+        if (table) {
+            const tr = table.getElementsByTagName("tr");
+            for (let i = 1; i < tr.length; i++) {
+                let tdMhs = tr[i].getElementsByTagName("td")[0];
+                let tdJur = tr[i].getElementsByTagName("td")[1];
                 
-                let matchesSearch = txtMhs.toUpperCase().indexOf(filter) > -1;
-                let matchesJurusan = filterJur === "" || txtJur.toUpperCase().indexOf(filterJur) > -1;
+                if (tdMhs && tdJur) {
+                    let txtMhs = tdMhs.textContent || tdMhs.innerText;
+                    let txtJur = tdJur.textContent || tdJur.innerText;
+                    
+                    let matchesSearch = txtMhs.toUpperCase().indexOf(filter) > -1;
+                    let matchesJurusan = filterJur === "" || txtJur.toUpperCase().indexOf(filterJur) > -1;
+                    
+                    if (matchesSearch && matchesJurusan) {
+                        tr[i].style.display = "";
+                    } else {
+                        tr[i].style.display = "none";
+                    }
+                }
+            }
+        }
+
+        // 2. Filter Mobile Cards
+        const cards = document.getElementsByClassName("mhs-card");
+        for (let i = 0; i < cards.length; i++) {
+            const nameEl = cards[i].querySelector(".mhs-name");
+            const nimEl = cards[i].querySelector(".mhs-nim");
+            const jurEl = cards[i].querySelector(".mhs-jurusan");
+            
+            if (nameEl && nimEl && jurEl) {
+                let nameTxt = nameEl.textContent || nameEl.innerText;
+                let nimTxt = nimEl.textContent || nimEl.innerText;
+                let jurTxt = jurEl.textContent || jurEl.innerText;
+                
+                let matchesSearch = (nameTxt.toUpperCase().indexOf(filter) > -1) || (nimTxt.toUpperCase().indexOf(filter) > -1);
+                let matchesJurusan = filterJur === "" || jurTxt.toUpperCase().indexOf(filterJur) > -1;
                 
                 if (matchesSearch && matchesJurusan) {
-                    tr[i].style.display = "";
+                    cards[i].style.setProperty('display', 'block', 'important');
                 } else {
-                    tr[i].style.display = "none";
+                    cards[i].style.setProperty('display', 'none', 'important');
                 }
             }
         }

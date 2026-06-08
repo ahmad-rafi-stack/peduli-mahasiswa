@@ -91,47 +91,50 @@
             </a>
         </div>
 
-        <div class="overflow-x-auto">
-            <table class="w-full text-left text-sm text-slate-600 border-collapse">
+        <!-- Table layout for Desktop and Tablet (md to lg) -->
+        <div class="hidden md:block overflow-x-auto bg-slate-50/50 p-4 border border-slate-100 rounded-2xl">
+            <table class="w-full text-left text-sm text-slate-600 border-separate border-spacing-y-2.5">
                 <thead>
-                    <tr class="border-b border-slate-100 text-xs font-bold text-slate-400 uppercase">
-                        <th class="py-3 px-2">Mahasiswa</th>
-                        <th class="py-3 px-2">Jurusan</th>
-                        <th class="py-3 px-2 text-right">Penghasilan Ortu</th>
-                        <th class="py-3 px-2 text-center">Tanggungan</th>
+                    <tr class="text-xs font-bold text-slate-400 uppercase">
+                        <th class="pb-1 px-6">Mahasiswa</th>
+                        <th class="pb-1 px-4">Jurusan</th>
+                        <th class="pb-1 px-4 text-right">Penghasilan Ortu</th>
+                        <th class="pb-1 px-6 text-center">Tanggungan</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-slate-100">
+                <tbody>
                     <?php if (!empty($poorest_students)): ?>
                         <?php foreach ($poorest_students as $student): ?>
-                            <tr class="hover:bg-slate-50/50 transition-colors">
-                                <td class="py-4 px-2 flex items-center space-x-3">
-                                    <div class="w-10 h-10 rounded-xl bg-slate-100 overflow-hidden flex-shrink-0 flex items-center justify-center border border-slate-200">
-                                        <?php if (!empty($student['foto']) && file_exists('uploads/' . $student['foto'])): ?>
-                                            <img src="<?php echo base_url('uploads/' . $student['foto']); ?>" alt="Foto" class="w-full h-full object-cover">
-                                        <?php else: ?>
-                                            <i class="fa-solid fa-user text-slate-400"></i>
-                                        <?php endif; ?>
-                                    </div>
-                                    <div>
-                                        <h4 class="font-semibold text-slate-800 line-clamp-1"><?php echo htmlspecialchars($student['nama_lengkap']); ?></h4>
-                                        <p class="text-xs text-slate-400">NIM <?php echo htmlspecialchars($student['nim']); ?></p>
+                            <tr class="bg-white hover:shadow-md transition-shadow duration-200">
+                                <td class="py-4 pl-6 pr-4 border-y border-l border-slate-200 rounded-l-2xl shadow-sm">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-10 h-10 rounded-xl bg-slate-100 overflow-hidden flex-shrink-0 flex items-center justify-center border border-slate-200">
+                                            <?php if (!empty($student['foto']) && file_exists('uploads/' . $student['foto'])): ?>
+                                                <img src="<?php echo base_url('uploads/' . $student['foto']); ?>" alt="Foto" class="w-full h-full object-cover">
+                                            <?php else: ?>
+                                                <i class="fa-solid fa-user text-slate-400"></i>
+                                            <?php endif; ?>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-semibold text-slate-800 line-clamp-1"><?php echo htmlspecialchars($student['nama_lengkap']); ?></h4>
+                                            <p class="text-xs text-slate-400">NIM <?php echo htmlspecialchars($student['nim']); ?></p>
+                                        </div>
                                     </div>
                                 </td>
-                                <td class="py-4 px-2">
+                                <td class="py-4 px-4 border-y border-slate-200 shadow-sm">
                                     <span class="text-xs font-medium text-slate-500 bg-slate-100 px-2.5 py-1 rounded-full"><?php echo htmlspecialchars($student['jurusan']); ?></span>
                                 </td>
-                                <td class="py-4 px-2 text-right font-semibold text-rose-600">
+                                <td class="py-4 px-4 text-right font-semibold text-rose-600 border-y border-slate-200 shadow-sm">
                                     Rp <?php echo number_format($student['penghasilan_bulanan'], 0, ',', '.'); ?>
                                 </td>
-                                <td class="py-4 px-2 text-center font-bold text-slate-700">
+                                <td class="py-4 pl-4 pr-6 text-center font-bold text-slate-700 border-y border-r border-slate-200 rounded-r-2xl shadow-sm">
                                     <?php echo $student['jumlah_tanggungan']; ?> <span class="text-xs font-medium text-slate-400">orang</span>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
                     <?php else: ?>
                         <tr>
-                            <td colspan="4" class="py-8 text-center text-slate-400">
+                            <td colspan="4" class="py-8 text-center text-slate-400 border border-slate-200 rounded-2xl bg-white shadow-sm">
                                 <i class="fa-solid fa-folder-open text-3xl mb-2 text-slate-300"></i>
                                 <p class="text-xs">Belum ada data mahasiswa terdaftar.</p>
                             </td>
@@ -139,6 +142,41 @@
                     <?php endif; ?>
                 </tbody>
             </table>
+        </div>
+
+        <!-- Card layout for Mobile Only (< md) -->
+        <div class="block md:hidden p-4 bg-slate-50/50 border border-slate-100 rounded-2xl space-y-3">
+            <?php if (!empty($poorest_students)): ?>
+                <?php foreach ($poorest_students as $student): ?>
+                    <div class="bg-white border border-slate-200 rounded-2xl p-4 flex items-center justify-between shadow-sm hover:shadow transition-shadow">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-11 h-11 rounded-xl bg-slate-100 overflow-hidden flex-shrink-0 flex items-center justify-center border border-slate-200">
+                                <?php if (!empty($student['foto']) && file_exists('uploads/' . $student['foto'])): ?>
+                                    <img src="<?php echo base_url('uploads/' . $student['foto']); ?>" alt="Foto" class="w-full h-full object-cover">
+                                <?php else: ?>
+                                    <i class="fa-solid fa-user text-slate-400 text-lg"></i>
+                                <?php endif; ?>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-slate-800 text-sm tracking-tight leading-snug"><?php echo htmlspecialchars($student['nama_lengkap']); ?></h4>
+                                <div class="flex flex-wrap items-center gap-1.5 mt-1">
+                                    <span class="text-[10px] font-semibold text-slate-500 bg-slate-100 px-2 py-0.5 rounded-md"><?php echo htmlspecialchars($student['jurusan']); ?></span>
+                                    <span class="text-[10px] text-slate-400 font-medium">Tanggungan: <?php echo $student['jumlah_tanggungan']; ?></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <span class="text-[10px] text-slate-400 font-medium block">Pemasukan Ortu</span>
+                            <span class="text-xs font-bold text-rose-600">Rp <?php echo number_format($student['penghasilan_bulanan'], 0, ',', '.'); ?></span>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <div class="py-8 text-center text-slate-400 border border-dashed border-slate-200 rounded-2xl bg-white shadow-sm">
+                    <i class="fa-solid fa-folder-open text-2xl mb-2 text-slate-300"></i>
+                    <p class="text-[11px] font-medium">Belum ada data mahasiswa terdaftar.</p>
+                </div>
+            <?php endif; ?>
         </div>
     </div>
 

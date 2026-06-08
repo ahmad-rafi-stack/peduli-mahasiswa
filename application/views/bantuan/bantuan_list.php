@@ -36,41 +36,41 @@
         </div>
     </div>
 
-    <!-- Table content -->
-    <div class="overflow-x-auto">
-        <table class="w-full text-left text-sm text-slate-600 border-collapse" id="bantuanTable">
+    <!-- Table layout for Desktop and Tablet (md to lg) -->
+    <div class="hidden md:block overflow-x-auto bg-slate-50/50 p-6 border-b border-slate-100">
+        <table class="w-full text-left text-sm text-slate-600 border-separate border-spacing-y-3" id="bantuanTable">
             <thead>
-                <tr class="border-b border-slate-100 text-xs font-bold text-slate-400 uppercase bg-slate-50/50">
-                    <th class="py-4 px-6">Mahasiswa</th>
-                    <th class="py-4 px-4">Jenis Bantuan</th>
-                    <th class="py-4 px-4 text-right">Nominal</th>
-                    <th class="py-4 px-4">Tanggal Terima</th>
-                    <th class="py-4 px-4 text-center">Status</th>
-                    <th class="py-4 px-6 text-center">Aksi</th>
+                <tr class="text-xs font-bold text-slate-400 uppercase">
+                    <th class="pb-1 px-6">Mahasiswa</th>
+                    <th class="pb-1 px-4">Jenis Bantuan</th>
+                    <th class="pb-1 px-4 text-right">Nominal</th>
+                    <th class="pb-1 px-4">Tanggal Terima</th>
+                    <th class="pb-1 px-4 text-center">Status</th>
+                    <th class="pb-1 px-6 text-center">Aksi</th>
                 </tr>
             </thead>
-            <tbody class="divide-y divide-slate-100">
+            <tbody>
                 <?php if (!empty($bantuan_list)): ?>
                     <?php foreach ($bantuan_list as $item): ?>
-                        <tr class="hover:bg-slate-50/30 transition-colors">
-                            <td class="py-4 px-6">
+                        <tr class="bg-white hover:shadow-md transition-shadow duration-200">
+                            <td class="py-4 pl-6 pr-4 border-y border-l border-slate-200 rounded-l-2xl shadow-sm">
                                 <a href="<?php echo base_url('mahasiswa/detail/' . $item['id_mahasiswa']); ?>" class="hover:text-blue-600 group transition">
                                     <h4 class="font-bold text-slate-800 tracking-tight leading-snug group-hover:text-blue-600"><?php echo htmlspecialchars($item['nama_lengkap']); ?></h4>
                                     <p class="text-xs text-slate-400 font-medium">NIM <?php echo htmlspecialchars($item['nim']); ?></p>
                                 </a>
                             </td>
-                            <td class="py-4 px-4">
+                            <td class="py-4 px-4 border-y border-slate-200 shadow-sm">
                                 <span class="text-xs font-semibold text-slate-700 bg-slate-100 px-2.5 py-1 rounded-lg">
                                     <?php echo htmlspecialchars($item['jenis_bantuan']); ?>
                                 </span>
                             </td>
-                            <td class="py-4 px-4 text-right font-bold text-indigo-600">
+                            <td class="py-4 px-4 text-right font-bold text-indigo-600 border-y border-slate-200 shadow-sm">
                                 Rp <?php echo number_format($item['jumlah_bantuan'], 0, ',', '.'); ?>
                             </td>
-                            <td class="py-4 px-4 text-xs font-medium text-slate-500">
+                            <td class="py-4 px-4 text-xs font-medium text-slate-500 border-y border-slate-200 shadow-sm">
                                 <?php echo date('d M Y', strtotime($item['tanggal_bantuan'])); ?>
                             </td>
-                            <td class="py-4 px-4 text-center">
+                            <td class="py-4 px-4 text-center border-y border-slate-200 shadow-sm">
                                 <span class="text-[10px] font-bold px-2.5 py-1 rounded-full
                                     <?php 
                                         if ($item['status'] == 'Diterima') echo 'bg-emerald-100 text-emerald-800';
@@ -80,7 +80,7 @@
                                     <?php echo $item['status']; ?>
                                 </span>
                             </td>
-                            <td class="py-4 px-6 text-center">
+                            <td class="py-4 pl-4 pr-6 text-center border-y border-r border-slate-200 rounded-r-2xl shadow-sm">
                                 <div class="flex items-center justify-center space-x-2.5">
                                     <!-- Quick Actions for pending status -->
                                     <?php if ($item['status'] == 'Diproses'): ?>
@@ -108,7 +108,7 @@
                     <?php endforeach; ?>
                 <?php else: ?>
                     <tr>
-                        <td colspan="6" class="py-12 text-center text-slate-400">
+                        <td colspan="6" class="py-12 text-center text-slate-400 border border-slate-200 rounded-2xl bg-white shadow-sm">
                             <i class="fa-solid fa-clock-rotate-left text-4xl mb-3 text-slate-300"></i>
                             <p class="text-xs font-medium">Belum ada pencatatan bantuan sosial.</p>
                         </td>
@@ -116,6 +116,77 @@
                 <?php endif; ?>
             </tbody>
         </table>
+    </div>
+
+    <!-- Card layout for Mobile Only (< md) -->
+    <div class="block md:hidden p-6 bg-slate-50/50 space-y-4" id="bantuanCardsContainer">
+        <?php if (!empty($bantuan_list)): ?>
+            <?php foreach ($bantuan_list as $item): ?>
+                <div class="bantuan-card p-6 bg-white border border-slate-200 rounded-2xl shadow-sm hover:shadow transition duration-200">
+                    <div class="flex items-center justify-between mb-3">
+                        <a href="<?php echo base_url('mahasiswa/detail/' . $item['id_mahasiswa']); ?>" class="hover:text-blue-600 group transition">
+                            <h4 class="bantuan-name font-bold text-slate-800 tracking-tight leading-snug group-hover:text-blue-600"><?php echo htmlspecialchars($item['nama_lengkap']); ?></h4>
+                            <p class="bantuan-nim text-xs text-slate-400 font-semibold">NIM <?php echo htmlspecialchars($item['nim']); ?></p>
+                        </a>
+                        <span class="bantuan-status text-[10px] font-bold px-2.5 py-1 rounded-full
+                            <?php 
+                                if ($item['status'] == 'Diterima') echo 'bg-emerald-100 text-emerald-800';
+                                elseif ($item['status'] == 'Ditolak') echo 'bg-rose-100 text-rose-800';
+                                else echo 'bg-amber-100 text-amber-800';
+                            ?>">
+                            <?php echo $item['status']; ?>
+                        </span>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-4 text-xs border-y border-slate-100 py-3 my-3">
+                        <div>
+                            <span class="text-slate-400 block mb-0.5">Jenis Bantuan</span>
+                            <span class="bantuan-jenis text-[11px] font-semibold text-slate-700 bg-slate-100 px-2 py-1 rounded-lg inline-block"><?php echo htmlspecialchars($item['jenis_bantuan']); ?></span>
+                        </div>
+                        <div>
+                            <span class="text-slate-400 block mb-0.5">Nominal</span>
+                            <span class="font-bold text-indigo-600 text-sm">Rp <?php echo number_format($item['jumlah_bantuan'], 0, ',', '.'); ?></span>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center justify-between mt-3">
+                        <div class="text-xs text-slate-500 font-medium">
+                            <i class="fa-regular fa-calendar text-slate-400 mr-1"></i>
+                            <?php echo date('d M Y', strtotime($item['tanggal_bantuan'])); ?>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <!-- Quick Actions for pending status -->
+                            <?php if ($item['status'] == 'Diproses'): ?>
+                                <a href="<?php echo base_url('bantuan/update_status/' . $item['id_bantuan'] . '/Diterima'); ?>" 
+                                   class="px-2.5 py-1.5 text-xs font-bold text-emerald-600 bg-emerald-50 hover:bg-emerald-100 rounded-xl transition flex items-center space-x-1" title="Terima Pengajuan">
+                                    <i class="fa-solid fa-circle-check"></i>
+                                    <span>Setuju</span>
+                                </a>
+                                <a href="<?php echo base_url('bantuan/update_status/' . $item['id_bantuan'] . '/Ditolak'); ?>" 
+                                   class="px-2.5 py-1.5 text-xs font-bold text-rose-600 bg-rose-50 hover:bg-rose-100 rounded-xl transition flex items-center space-x-1" title="Tolak Pengajuan">
+                                    <i class="fa-solid fa-circle-xmark"></i>
+                                    <span>Tolak</span>
+                                </a>
+                            <?php endif; ?>
+                            
+                            <button onclick="openEditModal(<?php echo htmlspecialchars(json_encode($item)); ?>)" 
+                                    class="p-2 text-slate-500 hover:bg-slate-50 rounded-xl transition" title="Edit Data">
+                                <i class="fa-solid fa-pen-to-square text-base"></i>
+                            </button>
+                            <button onclick="konfirmasiHapus('<?php echo base_url('bantuan/delete/' . $item['id_bantuan']); ?>', 'riwayat bantuan <?php echo htmlspecialchars($item['nama_lengkap']); ?>')" 
+                                    class="p-2 text-rose-500 hover:bg-rose-50 rounded-xl transition" title="Hapus Data">
+                                <i class="fa-solid fa-trash-can text-base"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <div class="py-12 text-center text-slate-400">
+                <i class="fa-solid fa-clock-rotate-left text-4xl mb-3 text-slate-300"></i>
+                <p class="text-xs font-medium">Belum ada pencatatan bantuan sosial.</p>
+            </div>
+        <?php endif; ?>
     </div>
 </div>
 
@@ -301,26 +372,56 @@
         const filter = input.value.toUpperCase();
         const select = document.getElementById("filterStatus");
         const filterSt = select.value.toUpperCase();
+        
+        // 1. Filter Desktop Table Rows
         const table = document.getElementById("bantuanTable");
-        const tr = table.getElementsByTagName("tr");
-
-        for (let i = 1; i < tr.length; i++) {
-            let tdMhs = tr[i].getElementsByTagName("td")[0];
-            let tdJenis = tr[i].getElementsByTagName("td")[1];
-            let tdStatus = tr[i].getElementsByTagName("td")[4];
-            
-            if (tdMhs && tdJenis && tdStatus) {
-                let txtMhs = tdMhs.textContent || tdMhs.innerText;
-                let txtJenis = tdJenis.textContent || tdJenis.innerText;
-                let txtStatus = tdStatus.textContent || tdStatus.innerText;
+        if (table) {
+            const tr = table.getElementsByTagName("tr");
+            for (let i = 1; i < tr.length; i++) {
+                let tdMhs = tr[i].getElementsByTagName("td")[0];
+                let tdJenis = tr[i].getElementsByTagName("td")[1];
+                let tdStatus = tr[i].getElementsByTagName("td")[4];
                 
-                let matchesSearch = (txtMhs.toUpperCase().indexOf(filter) > -1) || (txtJenis.toUpperCase().indexOf(filter) > -1);
-                let matchesStatus = filterSt === "" || txtStatus.toUpperCase().trim() === filterSt;
+                if (tdMhs && tdJenis && tdStatus) {
+                    let txtMhs = tdMhs.textContent || tdMhs.innerText;
+                    let txtJenis = tdJenis.textContent || tdJenis.innerText;
+                    let txtStatus = tdStatus.textContent || tdStatus.innerText;
+                    
+                    let matchesSearch = (txtMhs.toUpperCase().indexOf(filter) > -1) || (txtJenis.toUpperCase().indexOf(filter) > -1);
+                    let matchesStatus = filterSt === "" || txtStatus.toUpperCase().trim() === filterSt;
+                    
+                    if (matchesSearch && matchesStatus) {
+                        tr[i].style.display = "";
+                    } else {
+                        tr[i].style.display = "none";
+                    }
+                }
+            }
+        }
+
+        // 2. Filter Mobile Cards
+        const cards = document.getElementsByClassName("bantuan-card");
+        for (let i = 0; i < cards.length; i++) {
+            const nameEl = cards[i].querySelector(".bantuan-name");
+            const nimEl = cards[i].querySelector(".bantuan-nim");
+            const jenisEl = cards[i].querySelector(".bantuan-jenis");
+            const statusEl = cards[i].querySelector(".bantuan-status");
+            
+            if (nameEl && nimEl && jenisEl && statusEl) {
+                let nameTxt = nameEl.textContent || nameEl.innerText;
+                let nimTxt = nimEl.textContent || nimEl.innerText;
+                let jenisTxt = jenisEl.textContent || jenisEl.innerText;
+                let statusTxt = statusEl.textContent || statusEl.innerText;
+                
+                let matchesSearch = (nameTxt.toUpperCase().indexOf(filter) > -1) || 
+                                    (nimTxt.toUpperCase().indexOf(filter) > -1) || 
+                                    (jenisTxt.toUpperCase().indexOf(filter) > -1);
+                let matchesStatus = filterSt === "" || statusTxt.toUpperCase().trim() === filterSt;
                 
                 if (matchesSearch && matchesStatus) {
-                    tr[i].style.display = "";
+                    cards[i].style.setProperty('display', 'block', 'important');
                 } else {
-                    tr[i].style.display = "none";
+                    cards[i].style.setProperty('display', 'none', 'important');
                 }
             }
         }
