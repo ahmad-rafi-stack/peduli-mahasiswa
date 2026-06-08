@@ -1,0 +1,1 @@
+<?php error_reporting(E_ALL); ini_set("display_errors", 1); $res = file_put_contents("C:/xampp/htdocs/www.final-ahmad-rafi.com/application/controllers/test.txt", "hello"); echo "RES: ", var_export($res, true); ?>
