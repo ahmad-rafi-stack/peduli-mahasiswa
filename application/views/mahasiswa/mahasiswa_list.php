@@ -150,14 +150,12 @@
                         </div>
                         <div class="flex space-x-2">
                             <a href="<?php echo base_url('mahasiswa/detail/' . $mhs['id_mahasiswa']); ?>" 
-                               class="px-3 py-2 text-xs font-semibold text-blue-600 bg-blue-50 hover:bg-blue-100 rounded-xl transition flex items-center space-x-1" title="Detail Profil">
-                                <i class="fa-solid fa-eye"></i>
-                                <span>Detail</span>
+                               class="p-2.5 text-blue-600 bg-blue-50 hover:bg-blue-100 rounded-xl transition flex items-center justify-center" title="Detail Profil">
+                                <i class="fa-solid fa-eye text-sm"></i>
                             </a>
                             <button onclick="konfirmasiHapus('<?php echo base_url('mahasiswa/delete/' . $mhs['id_mahasiswa']); ?>', '<?php echo htmlspecialchars($mhs['nama_lengkap']); ?>')" 
-                                    class="px-3 py-2 text-xs font-semibold text-rose-600 bg-rose-50 hover:bg-rose-100 rounded-xl transition flex items-center space-x-1" title="Hapus Data">
-                                <i class="fa-solid fa-trash-can"></i>
-                                <span>Hapus</span>
+                                    class="p-2.5 text-rose-600 bg-rose-50 hover:bg-rose-100 rounded-xl transition flex items-center justify-center" title="Hapus Data">
+                                <i class="fa-solid fa-trash-can text-sm"></i>
                             </button>
                         </div>
                     </div>
