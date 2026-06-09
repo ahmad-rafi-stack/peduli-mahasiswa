@@ -116,30 +116,31 @@
                 <span>Riwayat Bantuan yang Diterima</span>
             </h3>
 
-            <div class="overflow-x-auto">
-                <table class="w-full text-left text-sm text-slate-600 border-collapse">
+            <!-- Table layout for Desktop and Tablet (md to lg) -->
+            <div class="hidden md:block overflow-x-auto bg-slate-50/50 p-4 border border-slate-100 rounded-2xl">
+                <table class="w-full text-left text-sm text-slate-600 border-separate border-spacing-y-2.5">
                     <thead>
-                        <tr class="border-b border-slate-100 text-xs font-bold text-slate-400 uppercase bg-slate-50/50">
-                            <th class="py-3 px-4">Jenis Bantuan</th>
-                            <th class="py-3 px-4">Nominal</th>
-                            <th class="py-3 px-4">Tanggal Penyerahan</th>
-                            <th class="py-3 px-4 text-center">Status</th>
+                        <tr class="text-xs font-bold text-slate-400 uppercase">
+                            <th class="pb-1 px-4">Jenis Bantuan</th>
+                            <th class="pb-1 px-4">Nominal</th>
+                            <th class="pb-1 px-4">Tanggal Penyerahan</th>
+                            <th class="pb-1 px-4 text-center">Status</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-slate-100">
+                    <tbody>
                         <?php if (!empty($student['bantuan_history'])): ?>
                             <?php foreach ($student['bantuan_history'] as $bantuan): ?>
-                                <tr class="hover:bg-slate-50/30 transition-colors">
-                                    <td class="py-4 px-4 font-semibold text-slate-700">
+                                <tr class="bg-white hover:shadow-md transition-shadow duration-200">
+                                    <td class="py-4 pl-4 pr-4 font-semibold text-slate-700 border-y border-l border-slate-200 rounded-l-2xl shadow-sm">
                                         <?php echo htmlspecialchars($bantuan['jenis_bantuan']); ?>
                                     </td>
-                                    <td class="py-4 px-4 font-bold text-indigo-600">
+                                    <td class="py-4 px-4 font-bold text-indigo-600 border-y border-slate-200 shadow-sm">
                                         Rp <?php echo number_format($bantuan['jumlah_bantuan'], 0, ',', '.'); ?>
                                     </td>
-                                    <td class="py-4 px-4 text-xs">
+                                    <td class="py-4 px-4 text-xs border-y border-slate-200 shadow-sm">
                                         <?php echo date('d M Y', strtotime($bantuan['tanggal_bantuan'])); ?>
                                     </td>
-                                    <td class="py-4 px-4 text-center">
+                                    <td class="py-4 px-4 text-center border-y border-r border-slate-200 rounded-r-2xl shadow-sm">
                                         <span class="text-[10px] font-bold px-2.5 py-1 rounded-full
                                             <?php 
                                                 if ($bantuan['status'] == 'Diterima') echo 'bg-emerald-100 text-emerald-800';
@@ -153,7 +154,7 @@
                             <?php endforeach; ?>
                         <?php else: ?>
                             <tr>
-                                <td colspan="4" class="py-8 text-center text-slate-400">
+                                <td colspan="4" class="py-8 text-center text-slate-400 border border-slate-200 rounded-2xl bg-white shadow-sm">
                                     <i class="fa-solid fa-clock-rotate-left text-3xl mb-2 text-slate-300"></i>
                                     <p class="text-xs">Belum ada riwayat penerimaan beasiswa/bantuan.</p>
                                 </td>
@@ -161,6 +162,42 @@
                         <?php endif; ?>
                     </tbody>
                 </table>
+            </div>
+
+            <!-- Card layout for Mobile Only (< md) -->
+            <div class="block md:hidden space-y-3">
+                <?php if (!empty($student['bantuan_history'])): ?>
+                    <?php foreach ($student['bantuan_history'] as $bantuan): ?>
+                        <div class="bg-white border border-slate-200 rounded-2xl shadow-sm p-4">
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="text-xs font-bold text-slate-700 bg-slate-100 px-2.5 py-1 rounded-lg"><?php echo htmlspecialchars($bantuan['jenis_bantuan']); ?></span>
+                                <span class="text-[10px] font-bold px-2.5 py-1 rounded-full
+                                    <?php 
+                                        if ($bantuan['status'] == 'Diterima') echo 'bg-emerald-100 text-emerald-800';
+                                        elseif ($bantuan['status'] == 'Ditolak') echo 'bg-rose-100 text-rose-800';
+                                        else echo 'bg-amber-100 text-amber-800';
+                                    ?>">
+                                    <?php echo $bantuan['status']; ?>
+                                </span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <span class="text-[10px] text-slate-400 block">Nominal</span>
+                                    <span class="text-sm font-bold text-indigo-600">Rp <?php echo number_format($bantuan['jumlah_bantuan'], 0, ',', '.'); ?></span>
+                                </div>
+                                <div class="text-right">
+                                    <span class="text-[10px] text-slate-400 block">Tanggal</span>
+                                    <span class="text-xs font-medium text-slate-600"><?php echo date('d M Y', strtotime($bantuan['tanggal_bantuan'])); ?></span>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <div class="py-8 text-center text-slate-400 border border-dashed border-slate-200 rounded-2xl bg-white shadow-sm">
+                        <i class="fa-solid fa-clock-rotate-left text-3xl mb-2 text-slate-300"></i>
+                        <p class="text-xs">Belum ada riwayat penerimaan beasiswa/bantuan.</p>
+                    </div>
+                <?php endif; ?>
             </div>
         </div>
 

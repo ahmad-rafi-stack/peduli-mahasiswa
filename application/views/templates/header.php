@@ -141,7 +141,7 @@ $current_controller = $this->uri->segment(1);
         <div class="flex-1 flex flex-col min-w-0">
             
             <!-- Topbar Header -->
-            <header class="bg-white/80 backdrop-blur-md px-8 py-5 flex items-center justify-between sticky top-0 z-10 border-b border-slate-100/50">
+            <header class="bg-white/80 backdrop-blur-md px-4 md:px-8 py-5 flex items-center justify-between sticky top-0 z-10 border-b border-slate-100/50">
                 <div class="flex items-center space-x-4">
                     <button onclick="toggleSidebar()" class="md:hidden text-slate-500 hover:text-slate-800 p-2 rounded-lg hover:bg-slate-100">
                         <i class="fa-solid fa-bars text-lg"></i>
@@ -152,7 +152,7 @@ $current_controller = $this->uri->segment(1);
                 </div>
                 
                 <!-- Right Header Actions (Bell, Avatar) -->
-                <div class="flex items-center space-x-6">
+                <div class="flex items-center space-x-3 md:space-x-6">
                     
                     <!-- Bell Notifications Dropdown -->
                     <div class="relative">
@@ -166,7 +166,7 @@ $current_controller = $this->uri->segment(1);
                         </button>
                         
                         <!-- Popover Notifikasi Bantuan Diproses -->
-                        <div id="notif-dropdown" class="hidden absolute right-0 mt-3 w-80 bg-white rounded-2xl border-2 border-slate-200 shadow-xl overflow-hidden z-50 transform origin-top-right transition-all duration-200">
+                        <div id="notif-dropdown" class="hidden fixed md:absolute left-4 right-4 md:left-auto md:right-0 mt-3 md:w-80 bg-white rounded-2xl border-2 border-slate-200 shadow-xl overflow-hidden z-50 transform origin-top-right transition-all duration-200 top-16 md:top-auto">
                             <div class="px-5 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
                                 <h4 class="font-semibold text-slate-800 text-sm">Bantuan Butuh Konfirmasi</h4>
                                 <span class="text-xs bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full font-bold">
