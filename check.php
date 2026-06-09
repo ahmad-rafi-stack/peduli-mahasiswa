@@ -1,1 +1,0 @@
-<?php echo file_exists("C:/xampp/htdocs/www.final-ahmad-rafi.com/application/controllers/Peminjaman.php") ? "YES" : "NO"; echo " | "; echo is_writable("C:/xampp/htdocs/www.final-ahmad-rafi.com/application/controllers/Peminjaman.php") ? "WRITABLE" : "READONLY"; ?>
