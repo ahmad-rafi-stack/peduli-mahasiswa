@@ -1,32 +1,23 @@
-.DS_Store
+# Database config (sensitive - contains password)
+application/config/database.php
 
+# Uploaded files (private student photos)
+uploads/
+
+# CodeIgniter cache & logs
 application/cache/*
-!application/cache/index.html
-
 application/logs/*
+!application/cache/index.html
 !application/logs/index.html
 
-!application/*/.htaccess
+# System files
+.DS_Store
+Thumbs.db
+desktop.ini
 
-composer.lock
-tests/mocks/database/ci_test.sqlite
+# Editor folders
+.vscode/
+.idea/
 
-user_guide_src/build/*
-user_guide_src/cilexer/build/*
-user_guide_src/cilexer/dist/*
-user_guide_src/cilexer/pycilexer.egg-info/*
-/vendor/
-
-# IDE Files
-#-------------------------
-/nbproject/
-.idea/*
-
-## Sublime Text cache files
-*.tmlanguage.cache
-*.tmPreferences.cache
-*.stTheme.cache
-*.sublime-workspace
-*.sublime-project
-/tests/tests/
-/tests/results/
+# Node modules (if any)
+node_modules/
