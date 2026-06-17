@@ -1,0 +1,25 @@
+{
+  "name": "www.peduli-mahasiswa.com",
+  "version": "1.0.0",
+  "description": "![PHP](https://img.shields.io/badge/PHP-7.4+-777BB4?style=flat-square&logo=php&logoColor=white) ![CodeIgniter](https://img.shields.io/badge/CodeIgniter-3.x-EF4223?style=flat-square&logo=codeigniter&logoColor=white) ![MySQL](https://img.shields.io/badge/MySQL-5.7+-4479A1?style=flat-square&logo=mysql&logoColor=white) ![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-3.x-06B6D4?style=flat-square&logo=tailwind-css&logoColor=white)",
+  "main": "index.js",
+  "scripts": {
+    "build": "tailwindcss -i ./assets/css/src/style.css -o ./assets/css/tailwind.css --minify",
+    "watch": "tailwindcss -i ./assets/css/src/style.css -o ./assets/css/tailwind.css --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ahmad-rafi-stack/peduli-mahasiswa.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/ahmad-rafi-stack/peduli-mahasiswa/issues"
+  },
+  "homepage": "https://github.com/ahmad-rafi-stack/peduli-mahasiswa#readme",
+  "devDependencies": {
+    "tailwindcss": "^3.4.19"
+  }
+}

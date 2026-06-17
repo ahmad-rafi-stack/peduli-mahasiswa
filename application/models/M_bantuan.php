@@ -38,4 +38,30 @@ class M_bantuan extends CI_Model {
         $this->db->where('id_bantuan', $id);
         return $this->db->delete('tb_bantuan');
     }
+
+    public function get_total_dana_bantuan() {
+        $this->db->select_sum('jumlah_bantuan');
+        $this->db->where('status', 'Diterima');
+        $res = $this->db->get('tb_bantuan')->row_array();
+        return isset($res['jumlah_bantuan']) ? (float)$res['jumlah_bantuan'] : 0;
+    }
+
+    public function count_penerima_bantuan() {
+        $this->db->where('status', 'Diterima');
+        return $this->db->count_all_results('tb_bantuan');
+    }
+
+    public function count_pending_bantuan() {
+        $this->db->where('status', 'Diproses');
+        return $this->db->count_all_results('tb_bantuan');
+    }
+
+    public function get_recent_bantuan($limit) {
+        $this->db->select('tb_bantuan.*, tb_mahasiswa.nim, tb_mahasiswa.nama_lengkap, tb_mahasiswa.jurusan');
+        $this->db->from('tb_bantuan');
+        $this->db->join('tb_mahasiswa', 'tb_mahasiswa.id_mahasiswa = tb_bantuan.id_mahasiswa');
+        $this->db->order_by('tb_bantuan.tanggal_bantuan', 'DESC');
+        $this->db->limit($limit);
+        return $this->db->get()->result_array();
+    }
 }

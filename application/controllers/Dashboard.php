@@ -11,29 +11,22 @@ class Dashboard extends MY_Controller {
 
     public function index() {
         // 1. Total Mahasiswa
-        $this->data['total_mahasiswa'] = $this->db->count_all('tb_mahasiswa');
+        $this->data['total_mahasiswa'] = $this->M_mahasiswa->count_all_mahasiswa();
 
         // 2. Total Bantuan Diterima (Nominal)
-        $this->db->select_sum('jumlah_bantuan');
-        $this->db->where('status', 'Diterima');
-        $res = $this->db->get('tb_bantuan')->row_array();
-        $this->data['total_dana_bantuan'] = isset($res['jumlah_bantuan']) ? $res['jumlah_bantuan'] : 0;
+        $this->data['total_dana_bantuan'] = $this->M_bantuan->get_total_dana_bantuan();
 
         // 3. Jumlah Bantuan Diterima (Penerima)
-        $this->db->where('status', 'Diterima');
-        $this->data['penerima_bantuan_count'] = $this->db->count_all_results('tb_bantuan');
+        $this->data['penerima_bantuan_count'] = $this->M_bantuan->count_penerima_bantuan();
 
         // 4. Bantuan Diproses (Pending)
-        $this->db->where('status', 'Diproses');
-        $this->data['bantuan_pending_count'] = $this->db->count_all_results('tb_bantuan');
+        $this->data['bantuan_pending_count'] = $this->M_bantuan->count_pending_bantuan();
 
         // 5. Mahasiswa Termiskin (Penghasilan Terendah)
         $this->data['poorest_students'] = $this->M_mahasiswa->get_poorest_mahasiswa(5);
 
         // 6. Recent Bantuan List
-        $this->data['recent_bantuan'] = $this->M_bantuan->get_all_bantuan();
-        // Limit to 5 recent bantuan
-        $this->data['recent_bantuan'] = array_slice($this->data['recent_bantuan'], 0, 5);
+        $this->data['recent_bantuan'] = $this->M_bantuan->get_recent_bantuan(5);
 
         // Load Views
         $this->load->view('templates/header', $this->data);

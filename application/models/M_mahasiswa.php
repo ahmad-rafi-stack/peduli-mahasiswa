@@ -74,4 +74,8 @@ class M_mahasiswa extends CI_Model {
         $this->db->where('id_mahasiswa', $id);
         return $this->db->delete('tb_mahasiswa'); // Will cascade delete tb_data_ekonomi & tb_bantuan
     }
+
+    public function count_all_mahasiswa() {
+        return $this->db->count_all('tb_mahasiswa');
+    }
 }
