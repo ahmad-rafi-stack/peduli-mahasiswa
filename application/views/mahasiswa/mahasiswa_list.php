@@ -184,6 +184,7 @@
         </div>
 
         <form action="<?php echo base_url('mahasiswa/add'); ?>" method="POST" enctype="multipart/form-data" class="p-6 space-y-6 max-h-[70vh] overflow-y-auto">
+            <input type="hidden" name="<?= $this->security->get_csrf_token_name(); ?>" value="<?= $this->security->get_csrf_hash(); ?>">
             
             <!-- SECTION 1: BIODATA MAHASISWA -->
             <div>

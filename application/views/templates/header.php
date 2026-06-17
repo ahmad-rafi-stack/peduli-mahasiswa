@@ -252,6 +252,7 @@ $current_controller = $this->uri->segment(1);
                     </div>
                     
                     <form action="<?php echo base_url('admin/update_profile'); ?>" method="POST" class="p-6 space-y-4">
+                        <input type="hidden" name="<?= $this->security->get_csrf_token_name(); ?>" value="<?= $this->security->get_csrf_hash(); ?>">
                         <div>
                             <label class="block text-xs font-semibold text-slate-600 mb-1.5">Nama Lengkap</label>
                             <input type="text" name="nama_admin" value="<?php echo htmlspecialchars($admin['nama_admin']); ?>" required

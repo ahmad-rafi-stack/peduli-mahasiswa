@@ -204,6 +204,7 @@
         </div>
 
         <form action="<?php echo base_url('bantuan/add'); ?>" method="POST" class="p-6 space-y-4">
+            <input type="hidden" name="<?= $this->security->get_csrf_token_name(); ?>" value="<?= $this->security->get_csrf_hash(); ?>">
             <div>
                 <label class="block text-xs font-semibold text-slate-600 mb-1.5">Pilih Mahasiswa</label>
                 <select name="id_mahasiswa" required
@@ -280,6 +281,7 @@
         </div>
 
         <form id="editForm" action="" method="POST" class="p-6 space-y-4">
+            <input type="hidden" name="<?= $this->security->get_csrf_token_name(); ?>" value="<?= $this->security->get_csrf_hash(); ?>">
             <div>
                 <label class="block text-xs font-semibold text-slate-600 mb-1.5">Nama Mahasiswa (Tidak Dapat Diubah)</label>
                 <input type="text" id="editNamaMhs" disabled 

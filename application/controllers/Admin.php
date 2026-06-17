@@ -21,7 +21,7 @@ class Admin extends MY_Controller {
         );
 
         if (!empty($password)) {
-            $data['password'] = md5($password);
+            $data['password'] = password_hash($password, PASSWORD_BCRYPT);
         }
 
         $update = $this->M_admin->update_profile($id_admin, $data);

@@ -40,6 +40,7 @@
 
         <!-- Form -->
         <form action="<?php echo base_url('auth/login_process'); ?>" method="POST" class="space-y-6">
+            <input type="hidden" name="<?= $this->security->get_csrf_token_name(); ?>" value="<?= $this->security->get_csrf_hash(); ?>">
             <!-- Username -->
             <div>
                 <label for="username" class="block text-sm font-semibold text-slate-700 mb-2">Username</label>
