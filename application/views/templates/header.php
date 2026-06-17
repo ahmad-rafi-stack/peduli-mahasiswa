@@ -39,7 +39,6 @@ $current_controller = $this->uri->segment(1);
         .sidebar-dark {
             background: linear-gradient(180deg, #0f172a 0%, #1e1b4b 50%, #030712 100%);
             border-right: 1px solid rgba(255, 255, 255, 0.05);
-            position: relative;
             overflow: hidden;
         }
         .sidebar-dark::before {

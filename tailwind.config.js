@@ -1,8 +1,12 @@
+const path = require('path');
+const fg = require('fast-glob');
+
+const contentPaths = fg.sync(path.join(__dirname, 'application/views/**/*.php').replace(/\\/g, '/'));
+console.log('Tailwind Config scanning paths:', contentPaths.length);
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: [
-    "./application/views/**/*.php",
-  ],
+  content: contentPaths,
   theme: {
     extend: {
       fontFamily: {
