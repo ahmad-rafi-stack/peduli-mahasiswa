@@ -1,6 +1,9 @@
 # Database config (sensitive - contains password)
 application/config/database.php
 
+# Environment secrets (encryption key, etc.) — NEVER commit
+.env
+
 # Uploaded files (private student photos)
 uploads/
 

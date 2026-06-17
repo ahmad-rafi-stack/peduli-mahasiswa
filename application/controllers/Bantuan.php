@@ -48,7 +48,16 @@ class Bantuan extends MY_Controller {
         }
     }
 
-    public function update_status($id, $status) {
+    public function update_status($id = NULL, $status = NULL) {
+        // Enforce POST: prevents CSRF bypass via GET links/URL segments
+        if ($this->input->method() !== 'post') {
+            redirect('bantuan?status=error&message=Aksi+tidak+diizinkan.');
+        }
+
+        // Allow status from POST body (form) for safety, fallback to segment
+        $status = $this->input->post('status', TRUE) ?: $status;
+        $id     = $this->input->post('id_bantuan', TRUE) ?: $id;
+
         if (!in_array($status, array('Diproses', 'Diterima', 'Ditolak'))) {
             redirect('bantuan?status=error&message=Status+tidak+valid.');
         }
@@ -87,7 +96,13 @@ class Bantuan extends MY_Controller {
         }
     }
 
-    public function delete($id) {
+    public function delete($id = NULL) {
+        // Enforce POST: prevents CSRF bypass via GET links/URL segments
+        if ($this->input->method() !== 'post') {
+            redirect('bantuan?status=error&message=Aksi+tidak+diizinkan.');
+        }
+
+        $id = $this->input->post('id_bantuan', TRUE) ?: $id;
         $delete = $this->M_bantuan->delete_bantuan($id);
         if ($delete) {
             redirect('bantuan?status=success&message=Data+bantuan+berhasil+dihapus.');

@@ -84,14 +84,14 @@
                                 <div class="flex items-center justify-center space-x-2.5">
                                     <!-- Quick Actions for pending status -->
                                     <?php if ($item['status'] == 'Diproses'): ?>
-                                        <a href="<?php echo base_url('bantuan/update_status/' . $item['id_bantuan'] . '/Diterima'); ?>" 
+                                        <button type="button" onclick="submitStatus(<?php echo $item['id_bantuan']; ?>, 'Diterima')"
                                            class="p-2 text-emerald-600 hover:bg-emerald-50 rounded-xl transition" title="Terima Pengajuan">
                                             <i class="fa-solid fa-circle-check text-lg"></i>
-                                        </a>
-                                        <a href="<?php echo base_url('bantuan/update_status/' . $item['id_bantuan'] . '/Ditolak'); ?>" 
+                                        </button>
+                                        <button type="button" onclick="submitStatus(<?php echo $item['id_bantuan']; ?>, 'Ditolak')"
                                            class="p-2 text-rose-500 hover:bg-rose-50 rounded-xl transition" title="Tolak Pengajuan">
                                             <i class="fa-solid fa-circle-xmark text-lg"></i>
-                                        </a>
+                                        </button>
                                     <?php endif; ?>
                                     
                                     <button onclick="openEditModal(<?php echo htmlspecialchars(json_encode($item)); ?>)" 
@@ -157,16 +157,16 @@
                         <div class="flex items-center space-x-2">
                             <!-- Quick Actions for pending status -->
                             <?php if ($item['status'] == 'Diproses'): ?>
-                                <a href="<?php echo base_url('bantuan/update_status/' . $item['id_bantuan'] . '/Diterima'); ?>" 
+                                <button type="button" onclick="submitStatus(<?php echo $item['id_bantuan']; ?>, 'Diterima')"
                                    class="px-2.5 py-1.5 text-xs font-bold text-emerald-600 bg-emerald-50 hover:bg-emerald-100 rounded-xl transition flex items-center space-x-1" title="Terima Pengajuan">
                                     <i class="fa-solid fa-circle-check"></i>
                                     <span>Setuju</span>
-                                </a>
-                                <a href="<?php echo base_url('bantuan/update_status/' . $item['id_bantuan'] . '/Ditolak'); ?>" 
+                                </button>
+                                <button type="button" onclick="submitStatus(<?php echo $item['id_bantuan']; ?>, 'Ditolak')"
                                    class="px-2.5 py-1.5 text-xs font-bold text-rose-600 bg-rose-50 hover:bg-rose-100 rounded-xl transition flex items-center space-x-1" title="Tolak Pengajuan">
                                     <i class="fa-solid fa-circle-xmark"></i>
                                     <span>Tolak</span>
-                                </a>
+                                </button>
                             <?php endif; ?>
                             
                             <button onclick="openEditModal(<?php echo htmlspecialchars(json_encode($item)); ?>)" 
@@ -337,6 +337,17 @@
     </div>
 </div>
 
+<!-- Hidden forms for POST-based state-changing actions (CSRF-protected) -->
+<form id="statusForm" action="" method="POST" style="display:none;">
+    <input type="hidden" name="<?= $this->security->get_csrf_token_name(); ?>" value="<?= $this->security->get_csrf_hash(); ?>">
+    <input type="hidden" name="id_bantuan" id="statusFormId" value="">
+    <input type="hidden" name="status" id="statusFormStatus" value="">
+</form>
+<form id="deleteForm" action="" method="POST" style="display:none;">
+    <input type="hidden" name="<?= $this->security->get_csrf_token_name(); ?>" value="<?= $this->security->get_csrf_hash(); ?>">
+    <input type="hidden" name="id_bantuan" value="">
+</form>
+
 <script>
     // Add Modal Toggles
     function openAddModal() {
@@ -349,7 +360,19 @@
         document.body.classList.remove('overflow-hidden');
     }
 
-    // Edit Modal Toggles & Populating Data
+    // Submit status change via POST form (CSRF-protected)
+    function submitStatus(id, status) {
+        const form = document.getElementById('statusForm');
+        const csrf = form.querySelector('input[name="<?= $this->security->get_csrf_token_name(); ?>"]');
+        // Refresh CSRF hash from cookie (regenerated on last request)
+        csrf.value = (typeof getCsrfHash === 'function') ? getCsrfHash() : csrf.value;
+        document.getElementById('statusFormId').value = id;
+        document.getElementById('statusFormStatus').value = status;
+        form.action = '<?php echo base_url('bantuan/update_status'); ?>';
+        form.submit();
+    }
+
+
     function openEditModal(item) {
         document.getElementById('editForm').action = "<?php echo base_url('bantuan/update/'); ?>" + item.id_bantuan;
         document.getElementById('editNamaMhs').value = item.nama_lengkap + " (NIM " + item.nim + ")";

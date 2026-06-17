@@ -56,6 +56,42 @@
 	define('ENVIRONMENT', isset($_SERVER['CI_ENV']) ? $_SERVER['CI_ENV'] : 'development');
 
 /*
+ * ---------------------------------------------------------------
+ * LOAD .env FILE (simple parser, no dependency)
+ * ---------------------------------------------------------------
+ * Membaca berkas .env (jika ada) di root aplikasi dan memuatnya
+ * ke dalam getenv()/$_ENV/$_SERVER agar secret seperti kunci enkripsi
+ * tidak pernah di-hardcode di version control.
+ */
+$__envFile = __DIR__ . DIRECTORY_SEPARATOR . '.env';
+if (is_file($__envFile)) {
+    foreach (file($__envFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) as $__line) {
+        $__line = trim($__line);
+        if ($__line === '' || $__line[0] === '#') {
+            continue;
+        }
+        // Lewati baris tanpa tanda sama-dengan
+        if (strpos($__line, '=') === FALSE) {
+            continue;
+        }
+        list($__name, $__value) = explode('=', $__line, 2);
+        $__name  = trim($__name);
+        $__value = trim($__value);
+        // Hapus tanda kutip yang membungkus nilai
+        if (strlen($__value) >= 2 && (($__value[0] === '"' && substr($__value, -1) === '"') || ($__value[0] === "'" && substr($__value, -1) === "'"))) {
+            $__value = substr($__value, 1, -1);
+        }
+        // Jangan menimpa variabel yang sudah diset di lingkungan server
+        if (!array_key_exists($__name, $_SERVER) && !array_key_exists($__name, $_ENV)) {
+            putenv($__name . '=' . $__value);
+            $_ENV[$__name]    = $__value;
+            $_SERVER[$__name] = $__value;
+        }
+    }
+}
+unset($__envFile, $__line, $__name, $__value);
+
+/*
  *---------------------------------------------------------------
  * ERROR REPORTING
  *---------------------------------------------------------------

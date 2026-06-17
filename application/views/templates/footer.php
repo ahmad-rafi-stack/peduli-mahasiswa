@@ -163,7 +163,8 @@
         });
 
         // Konfirmasi Hapus Data menggunakan SweetAlert2
-        function konfirmasiHapus(url, itemNama = 'data ini') {
+        // Mengirim via POST form (CSRF-protected) untuk mencegah CSRF bypass via GET
+        function konfirmasiHapus(url, itemNama = 'data ini', idField = 'id') {
             Swal.fire({
                 title: 'Apakah Anda yakin?',
                 text: "Anda akan menghapus " + itemNama + ". Tindakan ini tidak dapat dibatalkan!",
@@ -180,9 +181,33 @@
                 }
             }).then((result) => {
                 if (result.isConfirmed) {
-                    window.location.href = url;
+                    submitDeleteForm(url, idField);
                 }
             });
+        }
+
+        // Read CSRF hash from cookie set by CodeIgniter (token regenerated per request)
+        function getCsrfHash() {
+            const name = '<?php echo config_item('csrf_cookie_name'); ?>';
+            const match = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
+            return match ? decodeURIComponent(match.pop()) : '';
+        }
+
+        // Submit a hidden POST form to a delete endpoint (CSRF-protected)
+        function submitDeleteForm(actionUrl, idField) {
+            let form = document.getElementById('globalDeleteForm');
+            if (!form) {
+                form = document.createElement('form');
+                form.id = 'globalDeleteForm';
+                form.method = 'POST';
+                form.style.display = 'none';
+                document.body.appendChild(form);
+            }
+            form.action = actionUrl;
+            form.innerHTML =
+                '<input type="hidden" name="<?php echo $this->security->get_csrf_token_name(); ?>" value="' + getCsrfHash() + '">' +
+                '<input type="hidden" name="' + idField + '" value="1">';
+            form.submit();
         }
 
         // Penanganan Cropper.js untuk Foto Profil Admin

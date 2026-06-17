@@ -88,7 +88,7 @@
                 Swal.fire({
                     icon: 'error',
                     title: 'Gagal Masuk',
-                    text: '<?php echo $this->session->flashdata('error'); ?>',
+                    text: <?php echo json_encode($this->session->flashdata('error')); ?>,
                     confirmButtonColor: '#3b82f6',
                     customClass: {
                         popup: 'rounded-3xl',

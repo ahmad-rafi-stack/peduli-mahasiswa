@@ -3,6 +3,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Auth extends CI_Controller {
 
+    // Konfigurasi brute-force protection
+    private $max_attempts   = 5;   // Maksimum percobaan gagal sebelum lockout
+    private $lockout_window = 900;  // Jendela waktu penghitungan (detik) = 15 menit
+    private $lockout_time   = 900;  // Durasi kunci akun/IP setelah tercapai (detik) = 15 menit
+
     public function __construct() {
         parent::__construct();
         $this->load->library('session');
@@ -26,9 +31,22 @@ class Auth extends CI_Controller {
             redirect('auth');
         }
 
+        // Brute-force protection: kunci jika IP terlalu banyak percobaan gagal
+        if ($this->_is_locked_out()) {
+            $remaining = $this->_remaining_lockout();
+            $this->session->set_flashdata('error', 'Terlalu banyak percobaan login gagal. Coba lagi dalam ' . ceil($remaining / 60) . ' menit.');
+            redirect('auth');
+        }
+
         $admin = $this->M_auth->verify_login($username, $password);
 
         if ($admin) {
+            // Bersihkan jejak percobaan gagal setelah login berhasil
+            $this->_reset_attempts();
+
+            // Cegah session fixation: regenerasi ID session pasca-login
+            $this->session->sess_regenerate(TRUE);
+
             $session_data = array(
                 'id_admin' => $admin['id_admin'],
                 'nama_admin' => $admin['nama_admin'],
@@ -38,7 +56,13 @@ class Auth extends CI_Controller {
             $this->session->set_userdata($session_data);
             redirect('dashboard?status=success&message=Selamat+datang+kembali!');
         } else {
-            $this->session->set_flashdata('error', 'Username atau Password salah.');
+            $this->_record_attempt();
+            $attempts_left = $this->_attempts_left();
+            $msg = 'Username atau Password salah.';
+            if ($attempts_left > 0 && $attempts_left <= 2) {
+                $msg .= ' Sisa percobaan: ' . $attempts_left . '.';
+            }
+            $this->session->set_flashdata('error', $msg);
             redirect('auth');
         }
     }
@@ -46,5 +70,53 @@ class Auth extends CI_Controller {
     public function logout() {
         $this->session->sess_destroy();
         redirect('auth?status=success&message=Berhasil+logout.');
+    }
+
+    /**
+     * Mendapatkan kunci unik per-IP untuk penghitungan percobaan login.
+     * Mengandalkan IP klien; aman dari manipulasi cookie/session.
+     */
+    private function _attempt_key() {
+        return 'login_attempts_' . md5($this->input->ip_address());
+    }
+
+    private function _is_locked_out() {
+        $key = $this->_attempt_key() . '_lock';
+        $locked_at = $this->session->tempdata($key);
+        if ($locked_at !== NULL) {
+            return TRUE; // masih dalam masa kunci (tempdata auto-expire)
+        }
+        return FALSE;
+    }
+
+    private function _remaining_lockout() {
+        // tempdata di CI3 tidak menyediakan TTL tersisa; kembalikan nilai default.
+        return $this->lockout_time;
+    }
+
+    private function _record_attempt() {
+        $key = $this->_attempt_key();
+        $attempts = (int) $this->session->tempdata($key);
+        $attempts++;
+
+        if ($attempts >= $this->max_attempts) {
+            // Kunci IP selama lockout_time
+            $this->session->set_tempdata($key . '_lock', time(), $this->lockout_time);
+            $this->session->unset_tempdata($key);
+        } else {
+            // Pertahankan penghitungan selama jendela waktu
+            $this->session->set_tempdata($key, $attempts, $this->lockout_window);
+        }
+    }
+
+    private function _reset_attempts() {
+        $key = $this->_attempt_key();
+        $this->session->unset_tempdata($key);
+        $this->session->unset_tempdata($key . '_lock');
+    }
+
+    private function _attempts_left() {
+        $attempts = (int) $this->session->tempdata($this->_attempt_key());
+        return max(0, $this->max_attempts - $attempts);
     }
 }

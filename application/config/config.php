@@ -325,8 +325,11 @@ $config['cache_query_string'] = FALSE;
 |
 | https://codeigniter.com/userguide3/libraries/encryption.html
 |
+| SECURITY: The key is read from the APP_ENCRYPTION_KEY environment variable
+| (set via a gitignored .env file or server config) so secrets stay out of
+| version control. Fallback below keeps existing encrypted data working.
 */
-$config['encryption_key'] = '6622a4391049e25558a86090af476ca4';
+$config['encryption_key'] = getenv('APP_ENCRYPTION_KEY') ?: '6622a4391049e25558a86090af476ca4';
 
 /*
 |--------------------------------------------------------------------------
@@ -411,7 +414,8 @@ $config['sess_regenerate_destroy'] = FALSE;
 $config['cookie_prefix']	= '';
 $config['cookie_domain']	= '';
 $config['cookie_path']		= '/';
-$config['cookie_secure']	= FALSE;
+// Kirim cookie hanya via HTTPS saat situs diakses melalui HTTPS (mencegah pembocoran via HTTP)
+$config['cookie_secure']	= is_https();
 $config['cookie_httponly'] 	= TRUE;
 $config['cookie_samesite'] 	= 'Lax';
 

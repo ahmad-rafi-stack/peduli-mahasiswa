@@ -177,12 +177,18 @@ class Mahasiswa extends MY_Controller {
         }
     }
 
-    public function delete($id) {
+    public function delete($id = NULL) {
+        // Enforce POST: prevents CSRF bypass via GET links/URL segments
+        if ($this->input->method() !== 'post') {
+            redirect('mahasiswa?status=error&message=Aksi+tidak+diizinkan.');
+        }
+
+        $id = $this->input->post('id_mahasiswa', TRUE) ?: $id;
         $student = $this->M_mahasiswa->get_mahasiswa_by_id($id);
         if ($student) {
             // Delete photo file
             if (!empty($student['foto']) && file_exists('uploads/' . $student['foto'])) {
-                unlink('uploads/' . $student['foto']);
+                @unlink('uploads/' . $student['foto']);
             }
             $this->M_mahasiswa->delete_mahasiswa($id);
             redirect('mahasiswa?status=success&message=Data+mahasiswa+berhasil+dihapus.');

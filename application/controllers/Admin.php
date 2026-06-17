@@ -38,9 +38,15 @@ class Admin extends MY_Controller {
                 }
 
                 if (in_array($img_type, array('jpg', 'jpeg', 'png', 'gif'))) {
-                    $img_base64 = base64_decode($img_data);
+                    $img_base64 = base64_decode($img_data, TRUE);
                     
-                    if ($img_base64 !== FALSE) {
+                    // Validasi biner adalah gambar asli (bukan payload terselubung)
+                    if ($img_base64 !== FALSE && function_exists('getimagesizefromstring')) {
+                        $img_info = @getimagesizefromstring($img_base64);
+                        if ($img_info === FALSE || strpos($img_info['mime'], 'image/') !== 0) {
+                            redirect('dashboard?status=error&message=' . urlencode('File yang diunggah bukan gambar valid.'));
+                        }
+
                         $file_name = 'admin_' . $id_admin . '_' . time() . '.' . $img_type;
                         $file_path = './uploads/' . $file_name;
 
