@@ -10,6 +10,9 @@ $current_controller = $this->uri->segment(1);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Peduli Mahasiswa | Portal Admin</title>
     
+    <!-- Web Favicon / Tab Logo -->
+    <link rel="icon" type="image/png" href="<?php echo base_url('assets/images/logo.png'); ?>">
+    
     <!-- Google Fonts: Inter & Outfit -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -97,8 +100,8 @@ $current_controller = $this->uri->segment(1);
                 <!-- Logo -->
                 <div class="p-6 flex items-center justify-between">
                     <div class="flex items-center space-x-3">
-                        <div class="bg-blue-600 p-2.5 rounded-xl text-white shadow-lg shadow-blue-500/25 flex items-center justify-center">
-                            <i class="fa-solid fa-graduation-cap text-xl"></i>
+                        <div class="w-10 h-10 rounded-xl overflow-hidden shadow-lg shadow-blue-500/25 flex items-center justify-center border border-white/10 bg-slate-800">
+                            <img src="<?php echo base_url('assets/images/logo.png'); ?>" alt="Logo" class="w-full h-full object-cover">
                         </div>
                         <div>
                             <h1 class="font-bold text-white text-base leading-tight tracking-tight font-outfit">Peduli Mhs</h1>
