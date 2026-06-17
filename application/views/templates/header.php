@@ -84,6 +84,11 @@ $current_controller = $this->uri->segment(1);
             color: #ffffff !important;
             box-shadow: 0 0 20px rgba(59, 130, 246, 0.25), inset 0 0 10px rgba(255, 255, 255, 0.05);
         }
+        /* Custom Cropper.js agar area potong berbentuk lingkaran */
+        .cropper-view-box,
+        .cropper-face {
+            border-radius: 50%;
+        }
     </style>
 </head>
 <body class="text-slate-800">
@@ -100,7 +105,7 @@ $current_controller = $this->uri->segment(1);
                 <!-- Logo -->
                 <div class="p-6 flex items-center justify-between">
                     <div class="flex items-center space-x-3">
-                        <div class="w-10 h-10 rounded-xl overflow-hidden shadow-lg shadow-blue-500/25 flex items-center justify-center border border-white/10 bg-slate-800">
+                        <div class="w-10 h-10 rounded-full overflow-hidden shadow-lg shadow-blue-500/25 flex items-center justify-center border border-white/10 bg-slate-800">
                             <img src="<?php echo base_url('assets/images/logo.png'); ?>" alt="Logo" class="w-full h-full object-cover">
                         </div>
                         <div>
