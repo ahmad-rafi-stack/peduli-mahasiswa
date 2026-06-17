@@ -155,29 +155,29 @@
                     </div>
                     
                     <div class="flex items-center justify-between mt-3">
-                        <div class="text-xs text-slate-500 font-medium">
+                        <div class="text-xs text-slate-500 font-medium whitespace-nowrap">
                             <i class="fa-regular fa-calendar text-slate-400 mr-1"></i>
                             <?php echo date('d M Y', strtotime($item['tanggal_bantuan'])); ?>
                         </div>
-                        <div class="flex items-center space-x-2">
+                        <div class="flex items-center space-x-1.5">
                             <!-- Quick Actions for pending status -->
                             <?php if ($item['status'] == 'Diproses'): ?>
                                 <button type="button" onclick="submitStatus(<?php echo $item['id_bantuan']; ?>, 'Diterima')"
-                                   class="p-2 text-emerald-600 bg-emerald-50 hover:bg-emerald-100 rounded-xl transition flex items-center justify-center" title="Terima Pengajuan">
-                                    <i class="fa-solid fa-circle-check text-base"></i>
+                                   class="p-1.5 text-emerald-600 hover:bg-emerald-50 rounded-xl transition flex items-center justify-center" title="Terima Pengajuan">
+                                    <i class="fa-solid fa-circle-check text-lg"></i>
                                 </button>
                                 <button type="button" onclick="submitStatus(<?php echo $item['id_bantuan']; ?>, 'Ditolak')"
-                                   class="p-2 text-rose-500 bg-rose-50 hover:bg-rose-100 rounded-xl transition flex items-center justify-center" title="Tolak Pengajuan">
-                                    <i class="fa-solid fa-circle-xmark text-base"></i>
+                                   class="p-1.5 text-rose-500 hover:bg-rose-50 rounded-xl transition flex items-center justify-center" title="Tolak Pengajuan">
+                                    <i class="fa-solid fa-circle-xmark text-lg"></i>
                                 </button>
                             <?php endif; ?>
                             
                             <button onclick="openEditModal(<?php echo htmlspecialchars(json_encode($item)); ?>)" 
-                                    class="p-2 text-slate-500 hover:bg-slate-50 rounded-xl transition" title="Edit Data">
+                                    class="p-1.5 text-slate-500 hover:bg-slate-50 rounded-xl transition" title="Edit Data">
                                 <i class="fa-solid fa-pen-to-square text-base"></i>
                             </button>
                             <button onclick="konfirmasiHapus('<?php echo base_url('bantuan/delete/' . $item['id_bantuan']); ?>', 'riwayat bantuan <?php echo htmlspecialchars($item['nama_lengkap']); ?>')" 
-                                    class="p-2 text-rose-500 hover:bg-rose-50 rounded-xl transition" title="Hapus Data">
+                                    class="p-1.5 text-rose-500 hover:bg-rose-50 rounded-xl transition" title="Hapus Data">
                                 <i class="fa-solid fa-trash-can text-base"></i>
                             </button>
                         </div>
