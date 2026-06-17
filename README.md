@@ -19,6 +19,7 @@ Sistem informasi berbasis web untuk mengelola pendataan mahasiswa yang membutuhk
 - 🔔 **Notifikasi Real-time** — Bel notifikasi untuk pengajuan bantuan yang perlu konfirmasi
 - 🔍 **Live Search & Filter** — Pencarian dan filter data secara real-time
 - 📱 **Fully Responsive** — Tampilan Floating Cards yang optimal di desktop dan mobile
+- 🛡️ **Peningkatan Keamanan** — Dilengkapi proteksi CSRF, password hashing Bcrypt (migrasi otomatis dari MD5), perlindungan session cookie (HTTPOnly), dan penolakan eksekusi script di folder uploads via `.htaccess`
 
 ---
 
@@ -74,12 +75,9 @@ $db['default'] = array(
 );
 ```
 
-**5. Konfigurasi Base URL**
+**5. Konfigurasi Base URL (Otomatis)**
 
-Buka `application/config/config.php` dan sesuaikan:
-```php
-$config['base_url'] = 'http://localhost/peduli-mahasiswa/';
-```
+Secara default, `base_url` sudah dikonfigurasi secara dinamis agar otomatis mendeteksi host/domain Anda di `application/config/config.php`. Anda tidak perlu mengubahnya secara manual kecuali ingin menetapkan URL statis tertentu.
 
 **6. Akses Aplikasi**
 
