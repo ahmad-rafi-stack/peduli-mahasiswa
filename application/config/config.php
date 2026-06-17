@@ -326,7 +326,7 @@ $config['cache_query_string'] = FALSE;
 | https://codeigniter.com/userguide3/libraries/encryption.html
 |
 */
-$config['encryption_key'] = 'peduli_mahasiswa_key_2026';
+$config['encryption_key'] = '6622a4391049e25558a86090af476ca4';
 
 /*
 |--------------------------------------------------------------------------
