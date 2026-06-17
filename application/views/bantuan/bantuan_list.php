@@ -163,14 +163,12 @@
                             <!-- Quick Actions for pending status -->
                             <?php if ($item['status'] == 'Diproses'): ?>
                                 <button type="button" onclick="submitStatus(<?php echo $item['id_bantuan']; ?>, 'Diterima')"
-                                   class="px-2.5 py-1.5 text-xs font-bold text-emerald-600 bg-emerald-50 hover:bg-emerald-100 rounded-xl transition flex items-center space-x-1" title="Terima Pengajuan">
-                                    <i class="fa-solid fa-circle-check"></i>
-                                    <span>Setuju</span>
+                                   class="p-2 text-emerald-600 bg-emerald-50 hover:bg-emerald-100 rounded-xl transition flex items-center justify-center" title="Terima Pengajuan">
+                                    <i class="fa-solid fa-circle-check text-base"></i>
                                 </button>
                                 <button type="button" onclick="submitStatus(<?php echo $item['id_bantuan']; ?>, 'Ditolak')"
-                                   class="px-2.5 py-1.5 text-xs font-bold text-rose-600 bg-rose-50 hover:bg-rose-100 rounded-xl transition flex items-center space-x-1" title="Tolak Pengajuan">
-                                    <i class="fa-solid fa-circle-xmark"></i>
-                                    <span>Tolak</span>
+                                   class="p-2 text-rose-500 bg-rose-50 hover:bg-rose-100 rounded-xl transition flex items-center justify-center" title="Tolak Pengajuan">
+                                    <i class="fa-solid fa-circle-xmark text-base"></i>
                                 </button>
                             <?php endif; ?>
                             
