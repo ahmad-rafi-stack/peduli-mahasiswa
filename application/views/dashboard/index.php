@@ -1,12 +1,15 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed'); ?>
 
 <!-- Header Welcome Area -->
-<div class="mb-8 flex flex-col md:flex-row md:items-center md:justify-between">
+<div class="mb-8 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
     <div>
-        <h1 class="text-2xl font-bold text-slate-800 tracking-tight font-outfit">Dashboard Portal</h1>
-        <p class="text-sm text-slate-500 mt-1">Selamat datang kembali, <span class="font-semibold text-blue-600"><?php echo htmlspecialchars($admin['nama_admin']); ?></span>. Berikut adalah ringkasan pendataan sosial mahasiswa.</p>
+        <h1 class="text-xl md:text-2xl font-bold text-slate-800 tracking-tight font-outfit">Dashboard Portal</h1>
+        <p class="text-[11px] md:text-sm text-slate-500 mt-1">
+            <span class="md:hidden">Selamat datang, <span class="font-semibold text-blue-600"><?php echo htmlspecialchars($admin['nama_admin']); ?></span>. Ringkasan data beasiswa.</span>
+            <span class="hidden md:inline">Selamat datang kembali, <span class="font-semibold text-blue-600"><?php echo htmlspecialchars($admin['nama_admin']); ?></span>. Berikut adalah ringkasan pendataan sosial mahasiswa.</span>
+        </p>
     </div>
-    <div class="mt-4 md:mt-0 flex items-center space-x-3 text-xs bg-white py-2 px-4 rounded-xl border border-slate-200 shadow-sm text-slate-500 font-medium">
+    <div class="self-start md:self-auto flex items-center space-x-3 text-xs bg-white py-2.5 px-4 rounded-xl border border-slate-200 shadow-sm text-slate-500 font-medium">
         <i class="fa-regular fa-calendar-days text-blue-600 text-sm"></i>
         <span>Hari ini: <?php echo date('d M Y'); ?></span>
     </div>

@@ -1,16 +1,21 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed'); ?>
 
 <!-- Page Header Welcome -->
-<div class="mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between">
+<div class="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
     <div>
-        <h1 class="text-2xl font-bold text-slate-800 font-outfit tracking-tight">Data Mahasiswa Kurang Mampu</h1>
-        <p class="text-xs text-slate-500 mt-1">Daftar lengkap beserta indikator perekonomian orang tua mahasiswa</p>
+        <h1 class="text-xl sm:text-2xl font-bold text-slate-800 font-outfit tracking-tight">Data Mahasiswa Kurang Mampu</h1>
+        <p class="text-[11px] sm:text-xs text-slate-500 mt-1">
+            <span class="sm:hidden">Kelola data perekonomian & profil mahasiswa.</span>
+            <span class="hidden sm:inline">Daftar lengkap beserta indikator perekonomian orang tua mahasiswa.</span>
+        </p>
     </div>
-    <button onclick="openAddModal()" 
-            class="mt-4 sm:mt-0 inline-flex items-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs px-5 py-3 rounded-xl shadow-lg shadow-blue-500/20 transition duration-150 transform active:scale-95">
-        <i class="fa-solid fa-user-plus text-sm"></i>
-        <span>Tambah Mahasiswa Baru</span>
-    </button>
+    <div class="flex">
+        <button onclick="openAddModal()" 
+                class="w-full sm:w-auto inline-flex items-center justify-center space-x-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold text-xs px-5 py-3.5 rounded-xl shadow-lg shadow-blue-500/10 transition duration-150 transform active:scale-95">
+            <i class="fa-solid fa-user-plus text-sm"></i>
+            <span>Tambah Mahasiswa Baru</span>
+        </button>
+    </div>
 </div>
 
 <!-- Table Container Card -->
