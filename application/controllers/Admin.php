@@ -24,6 +24,25 @@ class Admin extends MY_Controller {
             $data['password'] = password_hash($password, PASSWORD_BCRYPT);
         }
 
+        // Penanganan upload logo aplikasi (Cropped / Base64)
+        $cropped_logo = $this->input->post('cropped_logo');
+        if (!empty($cropped_logo)) {
+            if (preg_match('/^data:image\/(\w+);base64,/', $cropped_logo, $type)) {
+                $logo_data = substr($cropped_logo, strpos($cropped_logo, ',') + 1);
+                $logo_type = strtolower($type[1]);
+                if (in_array($logo_type, array('jpg', 'jpeg', 'png', 'gif'))) {
+                    $logo_base64 = base64_decode($logo_data);
+                    if ($logo_base64 !== FALSE) {
+                        $logo_path = './assets/images/logo.png';
+                        if (!is_dir('./assets/images')) {
+                            mkdir('./assets/images', 0755, TRUE);
+                        }
+                        @file_put_contents($logo_path, $logo_base64);
+                    }
+                }
+            }
+        }
+
         // Penanganan upload foto profil admin (Cropped / Base64)
         $cropped_foto = $this->input->post('cropped_foto');
         if (!empty($cropped_foto)) {
