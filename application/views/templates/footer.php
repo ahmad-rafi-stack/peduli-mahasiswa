@@ -190,7 +190,16 @@
         function getCsrfHash() {
             const name = '<?php echo config_item('csrf_cookie_name'); ?>';
             const match = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
-            return match ? decodeURIComponent(match.pop()) : '';
+            let hash = match ? decodeURIComponent(match.pop()) : '';
+            
+            // Fallback to DOM input if cookie is empty/inaccessible (due to HttpOnly or cookie policies)
+            if (!hash) {
+                const csrfInput = document.querySelector('input[name="<?php echo $this->security->get_csrf_token_name(); ?>"]');
+                if (csrfInput) {
+                    hash = csrfInput.value;
+                }
+            }
+            return hash;
         }
 
         // Submit a hidden POST form to a delete endpoint (CSRF-protected)
