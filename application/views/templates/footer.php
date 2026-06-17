@@ -73,6 +73,18 @@
         function closeProfileModal() {
             document.getElementById('profile-modal').classList.add('hidden');
             document.body.classList.remove('overflow-hidden');
+            if (typeof cropper !== 'undefined' && cropper) {
+                cropper.destroy();
+                cropper = null;
+            }
+            const cropAreaContainer = document.getElementById('crop-area-container');
+            const fileInput = document.querySelector('input[name="foto_admin"]');
+            const imageToCrop = document.getElementById('image-to-crop');
+            const croppedFotoInput = document.getElementById('cropped_foto');
+            if (cropAreaContainer) cropAreaContainer.classList.add('hidden');
+            if (imageToCrop) imageToCrop.src = '';
+            if (fileInput) fileInput.value = '';
+            if (croppedFotoInput) croppedFotoInput.value = '';
         }
 
         // Confirm Logout
@@ -172,6 +184,114 @@
                 }
             });
         }
+
+        // Penanganan Cropper.js untuk Foto Profil Admin
+        var cropper = null;
+        document.addEventListener('DOMContentLoaded', function() {
+            const fileInput = document.querySelector('input[name="foto_admin"]');
+            const cropAreaContainer = document.getElementById('crop-area-container');
+            const imageToCrop = document.getElementById('image-to-crop');
+            const btnCropCancel = document.getElementById('btn-crop-cancel');
+            const btnCropConfirm = document.getElementById('btn-crop-confirm');
+            const croppedFotoInput = document.getElementById('cropped_foto');
+            const profileForm = document.getElementById('profile-form');
+
+            if (fileInput) {
+                fileInput.addEventListener('change', function(e) {
+                    const files = e.target.files;
+                    if (files && files.length > 0) {
+                        const file = files[0];
+                        if (file.size > 2 * 1024 * 1024) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Ukuran File Terlalu Besar',
+                                text: 'Maksimal ukuran file adalah 2MB.',
+                                confirmButtonColor: '#2563eb',
+                                customClass: { popup: 'rounded-3xl border-2 border-slate-200 font-sans' }
+                            });
+                            fileInput.value = '';
+                            return;
+                        }
+
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            imageToCrop.src = e.target.result;
+                            cropAreaContainer.classList.remove('hidden');
+                            
+                            if (cropper) {
+                                cropper.destroy();
+                            }
+                            
+                            cropper = new Cropper(imageToCrop, {
+                                aspectRatio: 1,
+                                viewMode: 1,
+                                dragMode: 'move',
+                                autoCropArea: 1,
+                                restore: false,
+                                guides: false,
+                                center: true,
+                                highlight: false,
+                                cropBoxMovable: true,
+                                cropBoxResizable: true,
+                                toggleDragModeOnDblclick: false,
+                            });
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                });
+            }
+
+            if (btnCropCancel) {
+                btnCropCancel.addEventListener('click', function() {
+                    if (cropper) {
+                        cropper.destroy();
+                        cropper = null;
+                    }
+                    imageToCrop.src = '';
+                    cropAreaContainer.classList.add('hidden');
+                    fileInput.value = '';
+                    croppedFotoInput.value = '';
+                });
+            }
+
+            if (btnCropConfirm) {
+                btnCropConfirm.addEventListener('click', function() {
+                    if (cropper) {
+                        const canvas = cropper.getCroppedCanvas({
+                            width: 300,
+                            height: 300
+                        });
+                        
+                        croppedFotoInput.value = canvas.toDataURL('image/jpeg', 0.9);
+                        
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Foto Terpotong!',
+                            text: 'Foto profil berhasil disesuaikan. Klik Simpan Perubahan untuk mengunggah.',
+                            timer: 1500,
+                            showConfirmButton: false,
+                            customClass: { popup: 'rounded-3xl border-2 border-slate-200 font-sans' }
+                        });
+                        
+                        cropper.destroy();
+                        cropper = null;
+                        cropAreaContainer.classList.add('hidden');
+                    }
+                });
+            }
+
+            if (profileForm) {
+                profileForm.addEventListener('submit', function(e) {
+                    if (cropper) {
+                        const canvas = cropper.getCroppedCanvas({
+                            width: 300,
+                            height: 300
+                        });
+                        croppedFotoInput.value = canvas.toDataURL('image/jpeg', 0.9);
+                    }
+                });
+            }
+        });
     </script>
 </body>
 </html>

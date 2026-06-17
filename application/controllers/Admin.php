@@ -24,8 +24,40 @@ class Admin extends MY_Controller {
             $data['password'] = password_hash($password, PASSWORD_BCRYPT);
         }
 
-        // Penanganan upload foto profil admin
-        if (!empty($_FILES['foto_admin']['name'])) {
+        // Penanganan upload foto profil admin (Cropped / Base64)
+        $cropped_foto = $this->input->post('cropped_foto');
+        if (!empty($cropped_foto)) {
+            // Bersihkan data URL prefix (data:image/jpeg;base64,)
+            if (preg_match('/^data:image\/(\w+);base64,/', $cropped_foto, $type)) {
+                $img_data = substr($cropped_foto, strpos($cropped_foto, ',') + 1);
+                $img_type = strtolower($type[1]); // jpeg, png, gif
+
+                // Ubah jpeg menjadi jpg demi konsistensi ekstensi
+                if ($img_type === 'jpeg') {
+                    $img_type = 'jpg';
+                }
+
+                if (in_array($img_type, array('jpg', 'jpeg', 'png', 'gif'))) {
+                    $img_base64 = base64_decode($img_data);
+                    
+                    if ($img_base64 !== FALSE) {
+                        $file_name = 'admin_' . $id_admin . '_' . time() . '.' . $img_type;
+                        $file_path = './uploads/' . $file_name;
+
+                        if (file_put_contents($file_path, $img_base64)) {
+                            $data['foto'] = $file_name;
+
+                            // Hapus foto lama jika ada
+                            $old_admin = $this->M_admin->get_admin_by_id($id_admin);
+                            if (!empty($old_admin['foto']) && file_exists('./uploads/' . $old_admin['foto'])) {
+                                @unlink('./uploads/' . $old_admin['foto']);
+                            }
+                        }
+                    }
+                }
+            }
+        } elseif (!empty($_FILES['foto_admin']['name'])) {
+            // Fallback: Upload file konvensional jika JavaScript Cropper dinonaktifkan
             $config['upload_path']   = './uploads/';
             $config['allowed_types'] = 'gif|jpg|png|jpeg';
             $config['max_size']      = 2048; // 2MB
