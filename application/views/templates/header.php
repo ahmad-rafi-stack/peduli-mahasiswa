@@ -251,8 +251,20 @@ $current_controller = $this->uri->segment(1);
                         </button>
                     </div>
                     
-                    <form action="<?php echo base_url('admin/update_profile'); ?>" method="POST" class="p-6 space-y-4">
+                    <form action="<?php echo base_url('admin/update_profile'); ?>" method="POST" enctype="multipart/form-data" class="p-6 space-y-4">
                         <input type="hidden" name="<?= $this->security->get_csrf_token_name(); ?>" value="<?= $this->security->get_csrf_hash(); ?>">
+                        
+                        <!-- Foto Profil Admin -->
+                        <div class="flex items-center space-x-4 mb-4">
+                            <img src="<?php echo $foto_profil; ?>" alt="Current Avatar" class="w-16 h-16 rounded-full object-cover border-2 border-blue-500/20 shadow-sm">
+                            <div class="flex-1">
+                                <label class="block text-xs font-semibold text-slate-600 mb-1.5">Ubah Foto Profil</label>
+                                <input type="file" name="foto_admin" accept="image/gif, image/jpeg, image/png, image/jpg"
+                                       class="w-full text-xs text-slate-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 transition">
+                                <span class="text-[10px] text-slate-400 mt-1 block">Format: JPG, JPEG, PNG, GIF. Maks: 2MB.</span>
+                            </div>
+                        </div>
+
                         <div>
                             <label class="block text-xs font-semibold text-slate-600 mb-1.5">Nama Lengkap</label>
                             <input type="text" name="nama_admin" value="<?php echo htmlspecialchars($admin['nama_admin']); ?>" required

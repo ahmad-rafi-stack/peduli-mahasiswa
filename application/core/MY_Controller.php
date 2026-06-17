@@ -30,8 +30,10 @@ class MY_Controller extends CI_Controller {
         // Fetch notifications (Pending bantuan requests)
         $pending_bantuan = $this->M_bantuan->get_pending_bantuan();
         
-        // Avatar placeholder
-        $foto_profil = 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&h=150&q=80';
+        // Avatar placeholder / database photo
+        $foto_profil = (!empty($admin['foto']) && file_exists(FCPATH . 'uploads/' . $admin['foto'])) 
+            ? base_url('uploads/' . $admin['foto']) 
+            : 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&h=150&q=80';
         
         $this->data['admin'] = $admin;
         $this->data['foto_profil'] = $foto_profil;
