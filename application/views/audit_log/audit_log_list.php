@@ -49,10 +49,11 @@ $sep = $qs_base ? '&' : '';
 
 <!-- Table Card -->
 <div class="bg-white rounded-3xl border border-slate-200/80 shadow-sm overflow-hidden">
-    <!-- Filter Area -->
-    <form method="GET" action="<?php echo base_url('audit_log'); ?>" class="p-6 border-b border-slate-100 bg-slate-50/30 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-        <div class="flex flex-col sm:flex-row gap-3 flex-1">
-            <select name="modul" class="bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-xs font-semibold text-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
+    <!-- Filter Area (auto-submit: realtime saat nilai berubah) -->
+    <form method="GET" action="<?php echo base_url('audit_log'); ?>" class="p-6 border-b border-slate-100 bg-slate-50/30 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+        <div class="flex flex-col sm:flex-row gap-4 md:gap-5 flex-1">
+            <select name="modul" onchange="this.form.submit()"
+                    class="bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-xs font-semibold text-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
                 <option value="">Semua Modul</option>
                 <?php foreach ($modules as $m): ?>
                     <option value="<?php echo htmlspecialchars($m['modul']); ?>" <?php echo ($filter['modul'] === $m['modul']) ? 'selected' : ''; ?>>
@@ -61,7 +62,8 @@ $sep = $qs_base ? '&' : '';
                 <?php endforeach; ?>
             </select>
 
-            <select name="aksi" class="bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-xs font-semibold text-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <select name="aksi" onchange="this.form.submit()"
+                    class="bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-xs font-semibold text-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
                 <option value="">Semua Aksi</option>
                 <?php
                 $aksi_options = array('login', 'login_gagal', 'logout', 'create', 'update', 'update_status', 'update_profile', 'delete');
@@ -73,12 +75,11 @@ $sep = $qs_base ? '&' : '';
                 <?php endforeach; ?>
             </select>
 
-            <input type="date" name="tanggal" value="<?php echo htmlspecialchars($filter['tanggal']); ?>"
+            <input type="date" name="tanggal" value="<?php echo htmlspecialchars($filter['tanggal']); ?>" onchange="this.form.submit()"
                    class="bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-xs font-semibold text-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
         </div>
         <div class="flex items-center space-x-2">
             <a href="<?php echo base_url('audit_log'); ?>" class="bg-slate-100 hover:bg-slate-200 text-slate-600 font-semibold text-xs px-4 py-2.5 rounded-xl transition">Reset</a>
-            <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs px-5 py-2.5 rounded-xl shadow-lg shadow-blue-500/20 transition">Terapkan Filter</button>
         </div>
     </form>
 
