@@ -51,9 +51,9 @@ $sep = $qs_base ? '&' : '';
 <div class="bg-white rounded-3xl border border-slate-200/80 shadow-sm overflow-hidden">
     <!-- Filter Area (auto-submit: realtime saat nilai berubah) -->
     <form method="GET" action="<?php echo base_url('audit_log'); ?>" class="p-5 sm:p-6 border-b border-slate-100 bg-slate-50/30 flex flex-col md:flex-row md:items-center md:justify-between gap-5 md:gap-6">
-        <div class="flex flex-col gap-3 sm:gap-4 md:flex-row md:gap-5 flex-1">
+        <div class="flex flex-col gap-3 sm:gap-4 md:flex-row md:gap-4">
             <select name="modul" onchange="this.form.submit()"
-                    class="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 sm:py-2.5 text-xs font-semibold text-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    class="w-full md:w-auto bg-white border border-slate-200 rounded-xl px-4 py-3 sm:py-2.5 text-xs font-semibold text-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
                 <option value="">Semua Modul</option>
                 <?php foreach ($modules as $m): ?>
                     <option value="<?php echo htmlspecialchars($m['modul']); ?>" <?php echo ($filter['modul'] === $m['modul']) ? 'selected' : ''; ?>>
@@ -63,7 +63,7 @@ $sep = $qs_base ? '&' : '';
             </select>
 
             <select name="aksi" onchange="this.form.submit()"
-                    class="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 sm:py-2.5 text-xs font-semibold text-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    class="w-full md:w-auto bg-white border border-slate-200 rounded-xl px-4 py-3 sm:py-2.5 text-xs font-semibold text-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
                 <option value="">Semua Aksi</option>
                 <?php
                 $aksi_options = array('login', 'login_gagal', 'logout', 'create', 'update', 'update_status', 'update_profile', 'delete');
@@ -76,7 +76,7 @@ $sep = $qs_base ? '&' : '';
             </select>
 
             <input type="date" name="tanggal" value="<?php echo htmlspecialchars($filter['tanggal']); ?>" onchange="this.form.submit()"
-                   class="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 sm:py-2.5 text-xs font-semibold text-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                   class="w-full md:w-auto bg-white border border-slate-200 rounded-xl px-4 py-3 sm:py-2.5 text-xs font-semibold text-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
         </div>
         <div class="flex items-center md:self-auto">
             <a href="<?php echo base_url('audit_log'); ?>" class="w-full md:w-auto text-center bg-slate-100 hover:bg-slate-200 text-slate-600 font-semibold text-xs px-4 py-3 sm:py-2.5 rounded-xl transition">Reset Filter</a>

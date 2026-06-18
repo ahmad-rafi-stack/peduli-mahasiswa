@@ -61,7 +61,7 @@
             <tbody>
                 <?php if (!empty($mahasiswa_list)): ?>
                     <?php foreach ($mahasiswa_list as $mhs): ?>
-                        <tr class="bg-white hover:shadow-md transition-shadow duration-200">
+                        <tr class="bg-white hover:shadow-md transition-shadow duration-200 student-row">
                             <td class="py-4 pl-6 pr-4 border-y border-l border-slate-200 rounded-l-2xl shadow-sm">
                                 <div class="flex items-center space-x-3">
                                     <div class="w-11 h-11 rounded-2xl bg-slate-100 overflow-hidden flex-shrink-0 flex items-center justify-center border border-slate-200">
@@ -105,13 +105,20 @@
                         </tr>
                     <?php endforeach; ?>
                 <?php else: ?>
-                    <tr>
+                    <tr class="empty-db-row">
                         <td colspan="6" class="py-12 text-center text-slate-400 border border-slate-200 rounded-2xl bg-white shadow-sm">
                             <i class="fa-solid fa-folder-open text-4xl mb-3 text-slate-300"></i>
                             <p class="text-xs font-medium">Belum ada data mahasiswa terdaftar.</p>
                         </td>
                     </tr>
                 <?php endif; ?>
+                <!-- Empty state row for search/filter -->
+                <tr class="empty-row bg-white" style="display: none;">
+                    <td colspan="6" class="py-12 text-center text-slate-400 border border-slate-200 rounded-2xl shadow-sm">
+                        <i class="fa-solid fa-magnifying-glass text-4xl mb-3 text-slate-300"></i>
+                        <p class="text-xs font-semibold">Tidak ada data mahasiswa yang cocok dengan pencarian.</p>
+                    </td>
+                </tr>
             </tbody>
         </table>
     </div>
@@ -167,11 +174,20 @@
                 </div>
             <?php endforeach; ?>
         <?php else: ?>
-            <div class="py-12 text-center text-slate-400">
+            <div class="py-12 text-center text-slate-400 empty-db-card">
                 <i class="fa-solid fa-folder-open text-4xl mb-3 text-slate-300"></i>
                 <p class="text-xs font-medium">Belum ada data mahasiswa terdaftar.</p>
             </div>
         <?php endif; ?>
+        <div id="emptyMobileCard" class="py-12 text-center text-slate-400 bg-white border border-slate-200 rounded-2xl shadow-sm" style="display: none;">
+            <i class="fa-solid fa-magnifying-glass text-4xl mb-3 text-slate-300"></i>
+            <p class="text-xs font-semibold">Tidak ada data mahasiswa yang cocok dengan pencarian.</p>
+        </div>
+    </div>
+
+    <!-- Pagination Footer -->
+    <div id="mahasiswaPagination" class="px-6 py-4 border-t border-slate-100 bg-white flex flex-col sm:flex-row items-center justify-between gap-3" style="display: none;">
+        <!-- Will be populated by JS -->
     </div>
 </div>
 
@@ -340,20 +356,32 @@
         document.body.classList.remove('overflow-hidden');
     }
 
+    let currentPage = 1;
+    let itemsPerPage = 5;
+
     // Dynamic Filter Table (Live Search)
     function filterTable() {
-        const input = document.getElementById("searchInput");
-        const filter = input.value.toUpperCase();
+        updatePagination(true);
+    }
+
+    function updatePagination(resetPage = false) {
+        if (resetPage) {
+            currentPage = 1;
+        }
+
+        const searchInput = document.getElementById("searchInput");
+        const filter = searchInput ? searchInput.value.toUpperCase() : "";
         const select = document.getElementById("filterJurusan");
-        const filterJur = select.value.toUpperCase();
-        
-        // 1. Filter Desktop Table Rows
+        const filterJur = select ? select.value.toUpperCase() : "";
+
+        // 1. Process Desktop Rows
         const table = document.getElementById("mhsTable");
+        let matchedDesktopRows = [];
         if (table) {
-            const tr = table.getElementsByTagName("tr");
-            for (let i = 1; i < tr.length; i++) {
-                let tdMhs = tr[i].getElementsByTagName("td")[0];
-                let tdJur = tr[i].getElementsByTagName("td")[1];
+            const trs = table.querySelectorAll("tbody tr.student-row");
+            trs.forEach(tr => {
+                let tdMhs = tr.getElementsByTagName("td")[0];
+                let tdJur = tr.getElementsByTagName("td")[1];
                 
                 if (tdMhs && tdJur) {
                     let txtMhs = tdMhs.textContent || tdMhs.innerText;
@@ -363,20 +391,31 @@
                     let matchesJurusan = filterJur === "" || txtJur.toUpperCase().indexOf(filterJur) > -1;
                     
                     if (matchesSearch && matchesJurusan) {
-                        tr[i].style.display = "";
+                        matchedDesktopRows.push(tr);
                     } else {
-                        tr[i].style.display = "none";
+                        tr.style.display = "none";
                     }
+                }
+            });
+
+            // Hide desktop empty placeholder if we have matches, otherwise show it
+            const emptyRow = table.querySelector("tbody tr.empty-row");
+            if (emptyRow) {
+                if (matchedDesktopRows.length === 0) {
+                    emptyRow.style.display = "";
+                } else {
+                    emptyRow.style.display = "none";
                 }
             }
         }
 
-        // 2. Filter Mobile Cards
-        const cards = document.getElementsByClassName("mhs-card");
-        for (let i = 0; i < cards.length; i++) {
-            const nameEl = cards[i].querySelector(".mhs-name");
-            const nimEl = cards[i].querySelector(".mhs-nim");
-            const jurEl = cards[i].querySelector(".mhs-jurusan");
+        // 2. Process Mobile Cards
+        const cards = document.querySelectorAll("#mhsCardsContainer .mhs-card");
+        let matchedMobileCards = [];
+        cards.forEach(card => {
+            const nameEl = card.querySelector(".mhs-name");
+            const nimEl = card.querySelector(".mhs-nim");
+            const jurEl = card.querySelector(".mhs-jurusan");
             
             if (nameEl && nimEl && jurEl) {
                 let nameTxt = nameEl.textContent || nameEl.innerText;
@@ -387,12 +426,184 @@
                 let matchesJurusan = filterJur === "" || jurTxt.toUpperCase().indexOf(filterJur) > -1;
                 
                 if (matchesSearch && matchesJurusan) {
-                    cards[i].style.setProperty('display', 'block', 'important');
+                    matchedMobileCards.push(card);
                 } else {
-                    cards[i].style.setProperty('display', 'none', 'important');
+                    card.style.setProperty('display', 'none', 'important');
                 }
             }
+        });
+
+        // Hide mobile empty placeholder if we have matches, otherwise show it
+        const emptyMobile = document.getElementById("emptyMobileCard");
+        if (emptyMobile) {
+            if (matchedMobileCards.length === 0) {
+                emptyMobile.style.display = "";
+            } else {
+                emptyMobile.style.display = "none";
+            }
         }
+
+        // 3. Paginate Desktop
+        const totalDesktop = matchedDesktopRows.length;
+        const totalDesktopPages = Math.ceil(totalDesktop / itemsPerPage);
+        if (currentPage > totalDesktopPages && totalDesktopPages > 0) {
+            currentPage = totalDesktopPages;
+        }
+        
+        const startDesktopIdx = (currentPage - 1) * itemsPerPage;
+        const endDesktopIdx = startDesktopIdx + itemsPerPage;
+        
+        matchedDesktopRows.forEach((tr, index) => {
+            if (index >= startDesktopIdx && index < endDesktopIdx) {
+                tr.style.display = "";
+            } else {
+                tr.style.display = "none";
+            }
+        });
+
+        // 4. Paginate Mobile
+        const totalMobile = matchedMobileCards.length;
+        const totalMobilePages = Math.ceil(totalMobile / itemsPerPage);
+        
+        const startMobileIdx = (currentPage - 1) * itemsPerPage;
+        const endMobileIdx = startMobileIdx + itemsPerPage;
+        
+        matchedMobileCards.forEach((card, index) => {
+            if (index >= startMobileIdx && index < endMobileIdx) {
+                card.style.setProperty('display', 'block', 'important');
+            } else {
+                card.style.setProperty('display', 'none', 'important');
+            }
+        });
+
+        // 5. Render Pagination Controls
+        const paginationContainer = document.getElementById("mahasiswaPagination");
+        if (paginationContainer) {
+            const totalItems = Math.max(totalDesktop, totalMobile);
+            const totalPages = Math.ceil(totalItems / itemsPerPage);
+            
+            if (totalItems === 0) {
+                paginationContainer.style.display = "none";
+                return;
+            }
+            paginationContainer.style.display = "flex";
+            
+            const fromItem = totalItems > 0 ? startDesktopIdx + 1 : 0;
+            const toItem = Math.min(startDesktopIdx + itemsPerPage, totalItems);
+            
+            let html = `
+                <div class="flex flex-col sm:flex-row items-center justify-between w-full gap-4">
+                    <div class="flex items-center space-x-4">
+                        <p class="text-xs text-slate-500">
+                            Menampilkan <span class="font-semibold text-slate-700">${fromItem}</span> - <span class="font-semibold text-slate-700">${toItem}</span> dari <span class="font-semibold text-slate-700">${totalItems}</span> mahasiswa
+                        </p>
+                        <div class="flex items-center space-x-1.5 bg-slate-50 border border-slate-200/80 rounded-xl px-2 py-1">
+                            <span class="text-[10px] font-semibold text-slate-400">Tampilkan:</span>
+                            <select onchange="changeItemsPerPage(this.value)" class="bg-transparent border-none text-[10px] font-bold text-slate-600 focus:outline-none cursor-pointer">
+                                <option value="5" ${itemsPerPage === 5 ? 'selected' : ''}>5</option>
+                                <option value="10" ${itemsPerPage === 10 ? 'selected' : ''}>10</option>
+                                <option value="25" ${itemsPerPage === 25 ? 'selected' : ''}>25</option>
+                                <option value="50" ${itemsPerPage === 50 ? 'selected' : ''}>50</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-1">
+            `;
+            
+            // Previous Button
+            if (currentPage > 1) {
+                html += `
+                    <button type="button" onclick="goToPage(${currentPage - 1})" class="p-2 text-slate-500 hover:bg-slate-100 hover:text-slate-800 rounded-xl transition flex items-center justify-center" title="Sebelumnya">
+                        <i class="fa-solid fa-chevron-left text-xs"></i>
+                    </button>
+                `;
+            } else {
+                html += `
+                    <button type="button" disabled class="p-2 text-slate-300 cursor-not-allowed rounded-xl flex items-center justify-center">
+                        <i class="fa-solid fa-chevron-left text-xs"></i>
+                    </button>
+                `;
+            }
+            
+            // Page Numbers
+            const maxPageVisible = 5;
+            let startPage = Math.max(1, currentPage - 2);
+            let endPage = Math.min(totalPages, startPage + maxPageVisible - 1);
+            if (endPage - startPage + 1 < maxPageVisible) {
+                startPage = Math.max(1, endPage - maxPageVisible + 1);
+            }
+            
+            if (startPage > 1) {
+                html += `
+                    <button type="button" onclick="goToPage(1)" class="w-8 h-8 flex items-center justify-center text-xs font-semibold rounded-xl transition ${currentPage === 1 ? 'bg-blue-600 text-white shadow-sm' : 'text-slate-500 hover:bg-slate-100'}">1</button>
+                `;
+                if (startPage > 2) {
+                    html += `<span class="text-slate-400 text-xs px-1">...</span>`;
+                }
+            }
+            
+            for (let p = startPage; p <= endPage; p++) {
+                if (p === 1 && startPage > 1) continue; // Skip to avoid duplicate
+                html += `
+                    <button type="button" onclick="goToPage(${p})" class="w-8 h-8 flex items-center justify-center text-xs font-semibold rounded-xl transition ${currentPage === p ? 'bg-blue-600 text-white shadow-sm' : 'text-slate-500 hover:bg-slate-100'}">${p}</button>
+                `;
+            }
+            
+            if (endPage < totalPages) {
+                if (endPage < totalPages - 1) {
+                    html += `<span class="text-slate-400 text-xs px-1">...</span>`;
+                }
+                html += `
+                    <button type="button" onclick="goToPage(${totalPages})" class="w-8 h-8 flex items-center justify-center text-xs font-semibold rounded-xl transition ${currentPage === totalPages ? 'bg-blue-600 text-white shadow-sm' : 'text-slate-500 hover:bg-slate-100'}">${totalPages}</button>
+                `;
+            }
+            
+            // Next Button
+            if (currentPage < totalPages) {
+                html += `
+                    <button type="button" onclick="goToPage(${currentPage + 1})" class="p-2 text-slate-500 hover:bg-slate-100 hover:text-slate-800 rounded-xl transition flex items-center justify-center" title="Berikutnya">
+                        <i class="fa-solid fa-chevron-right text-xs"></i>
+                    </button>
+                `;
+            } else {
+                html += `
+                    <button type="button" disabled class="p-2 text-slate-300 cursor-not-allowed rounded-xl flex items-center justify-center">
+                        <i class="fa-solid fa-chevron-right text-xs"></i>
+                    </button>
+                `;
+            }
+            
+            html += `
+                    </div>
+                </div>
+            `;
+            
+            paginationContainer.innerHTML = html;
+        }
+    }
+
+    function goToPage(page) {
+        currentPage = page;
+        updatePagination(false);
+        // Smooth scroll to top of table
+        const tableContainer = document.getElementById("mhsTable");
+        if (tableContainer) {
+            tableContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+    }
+
+    function changeItemsPerPage(val) {
+        itemsPerPage = parseInt(val);
+        updatePagination(true);
+    }
+
+    // Initialize pagination on DOM load
+    if (document.readyState !== 'loading') {
+        updatePagination(true);
+    } else {
+        document.addEventListener('DOMContentLoaded', function() {
+            updatePagination(true);
+        });
     }
 
     // Format Currency Input (Rupiah)
