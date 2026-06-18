@@ -113,6 +113,12 @@ $current_controller = $this->uri->segment(1);
                         <i class="fa-solid fa-hand-holding-dollar w-5 text-center text-lg"></i>
                         <span>Bantuan Sosial</span>
                     </a>
+
+                    <!-- Audit Log Link -->
+                    <a href="<?php echo base_url('audit_log'); ?>" class="flex items-center space-x-3 px-4 py-3 rounded-xl transition-all <?php echo ($current_controller == 'audit_log') ? 'active-glass-capsule text-white font-semibold' : 'text-slate-400 hover:bg-white/5 hover:text-white'; ?>">
+                        <i class="fa-solid fa-clock-rotate-left w-5 text-center text-lg"></i>
+                        <span>Log Aktivitas</span>
+                    </a>
                 </nav>
             </div>
             

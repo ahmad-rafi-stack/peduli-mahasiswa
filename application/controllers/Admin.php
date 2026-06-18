@@ -91,6 +91,10 @@ class Admin extends MY_Controller {
         if ($update) {
             $this->session->set_userdata('nama_admin', $nama_admin);
             $this->session->set_userdata('username', $username);
+
+            // Catat aktivitas pembaruan profil (catat khusus bila password ikut diubah)
+            $this->M_audit_log->log('update_profile', 'Admin', 'Memperbarui profil admin (username: ' . $username . ')' . (!empty($password) ? ', termasuk password' : ''));
+
             redirect('dashboard?status=success_profile');
         } else {
             redirect('dashboard?status=error_profile');

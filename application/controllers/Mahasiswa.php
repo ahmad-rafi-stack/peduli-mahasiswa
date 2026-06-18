@@ -91,6 +91,7 @@ class Mahasiswa extends MY_Controller {
         $insert = $this->M_mahasiswa->insert_mahasiswa($data_mhs, $data_eko);
 
         if ($insert) {
+            $this->M_audit_log->log('create', 'Mahasiswa', 'Menambahkan mahasiswa baru: ' . $nama_lengkap . ' (NIM ' . $nim . ')');
             redirect('mahasiswa?status=success&message=Data+mahasiswa+berhasil+ditambahkan.');
         } else {
             redirect('mahasiswa?status=error&message=Terjadi+kesalahan+database.');
@@ -171,6 +172,7 @@ class Mahasiswa extends MY_Controller {
         $update = $this->M_mahasiswa->update_mahasiswa($id, $data_mhs, $data_eko);
 
         if ($update) {
+            $this->M_audit_log->log('update', 'Mahasiswa', 'Memperbarui data mahasiswa: ' . $nama_lengkap . ' (NIM ' . $current_student['nim'] . ')');
             redirect('mahasiswa/detail/' . $id . '?status=success&message=Data+mahasiswa+berhasil+diperbarui.');
         } else {
             redirect('mahasiswa/detail/' . $id . '?status=error&message=Gagal+memperbarui+data.');
@@ -191,6 +193,7 @@ class Mahasiswa extends MY_Controller {
                 @unlink('uploads/' . $student['foto']);
             }
             $this->M_mahasiswa->delete_mahasiswa($id);
+            $this->M_audit_log->log('delete', 'Mahasiswa', 'Menghapus mahasiswa: ' . $student['nama_lengkap'] . ' (NIM ' . $student['nim'] . ')');
             redirect('mahasiswa?status=success&message=Data+mahasiswa+berhasil+dihapus.');
         } else {
             redirect('mahasiswa?status=error&message=Data+tidak+ditemukan.');

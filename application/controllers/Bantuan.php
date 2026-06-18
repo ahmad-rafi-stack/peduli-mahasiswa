@@ -42,6 +42,7 @@ class Bantuan extends MY_Controller {
         $insert = $this->M_bantuan->insert_bantuan($data);
 
         if ($insert) {
+            $this->M_audit_log->log('create', 'Bantuan', 'Menambahkan bantuan "' . $jenis_bantuan . '" (Rp ' . number_format($jumlah_bantuan, 0, ',', '.') . ') untuk mahasiswa ID ' . $id_mahasiswa);
             redirect('bantuan?status=success&message=Data+bantuan+berhasil+ditambahkan.');
         } else {
             redirect('bantuan?status=error&message=Terjadi+kesalahan+saat+menambah+data.');
@@ -66,6 +67,7 @@ class Bantuan extends MY_Controller {
         $update = $this->M_bantuan->update_bantuan($id, $data);
 
         if ($update) {
+            $this->M_audit_log->log('update_status', 'Bantuan', 'Mengubah status bantuan ID ' . $id . ' menjadi "' . $status . '"');
             redirect('bantuan?status=success&message=Status+bantuan+berhasil+diperbarui.');
         } else {
             redirect('bantuan?status=error&message=Gagal+memperbarui+status.');
@@ -90,6 +92,7 @@ class Bantuan extends MY_Controller {
         $update = $this->M_bantuan->update_bantuan($id, $data);
 
         if ($update) {
+            $this->M_audit_log->log('update', 'Bantuan', 'Memperbarui bantuan ID ' . $id . ' ("' . $jenis_bantuan . '", Rp ' . number_format($jumlah_bantuan, 0, ',', '.') . ', status: ' . $status . ')');
             redirect('bantuan?status=success&message=Data+bantuan+berhasil+diperbarui.');
         } else {
             redirect('bantuan?status=error&message=Gagal+memperbarui+data.');
@@ -105,6 +108,7 @@ class Bantuan extends MY_Controller {
         $id = $this->input->post('id_bantuan', TRUE) ?: $id;
         $delete = $this->M_bantuan->delete_bantuan($id);
         if ($delete) {
+            $this->M_audit_log->log('delete', 'Bantuan', 'Menghapus bantuan ID ' . $id);
             redirect('bantuan?status=success&message=Data+bantuan+berhasil+dihapus.');
         } else {
             redirect('bantuan?status=error&message=Gagal+menghapus+data.');

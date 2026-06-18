@@ -18,6 +18,7 @@ class MY_Controller extends CI_Controller {
         
         $this->load->model('M_admin');
         $this->load->model('M_bantuan');
+        $this->load->model('M_audit_log');
         
         $admin_id = $this->session->userdata('id_admin');
         $admin = $this->M_admin->get_admin_by_id($admin_id);

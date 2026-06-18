@@ -13,6 +13,7 @@ class Auth extends CI_Controller {
         $this->load->library('session');
         $this->load->helper('url');
         $this->load->model('M_auth');
+        $this->load->model('M_audit_log');
     }
 
     public function index() {
@@ -54,6 +55,14 @@ class Auth extends CI_Controller {
                 'logged_in' => TRUE
             );
             $this->session->set_userdata($session_data);
+
+            // Catat aktivitas login berhasil
+            $this->M_audit_log->log('login', 'Auth', 'Login berhasil', array(
+                'id_admin'   => $admin['id_admin'],
+                'nama_admin' => $admin['nama_admin'],
+                'username'   => $admin['username'],
+            ));
+
             redirect('dashboard?status=success&message=Selamat+datang+kembali!');
         } else {
             $this->_record_attempt();
@@ -62,12 +71,23 @@ class Auth extends CI_Controller {
             if ($attempts_left > 0 && $attempts_left <= 2) {
                 $msg .= ' Sisa percobaan: ' . $attempts_left . '.';
             }
+
+            // Catat upaya login gagal (tanpa id_admin karena belum terverifikasi)
+            $this->M_audit_log->log('login_gagal', 'Auth', 'Upaya login gagal untuk username: ' . $username, array(
+                'id_admin'   => NULL,
+                'nama_admin' => NULL,
+                'username'   => $username,
+            ));
+
             $this->session->set_flashdata('error', $msg);
             redirect('auth');
         }
     }
 
     public function logout() {
+        // Catat aktivitas logout sebelum session dihancurkan
+        $this->M_audit_log->log('logout', 'Auth', 'Logout');
+
         $this->session->sess_destroy();
         redirect('auth?status=success&message=Berhasil+logout.');
     }
