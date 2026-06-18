@@ -18,6 +18,8 @@ Sistem informasi berbasis web untuk mengelola pendataan mahasiswa yang membutuhk
 - 💰 **Manajemen Bantuan Sosial** — Pencatatan dan persetujuan bantuan dengan Quick Approval
 - 🔔 **Notifikasi Real-time** — Bel notifikasi untuk pengajuan bantuan yang perlu konfirmasi
 - 🔍 **Live Search & Filter** — Pencarian dan filter data secara real-time
+- 📑 **Paginasi Daftar Mahasiswa** — Paginasi dinamis (client-side) dengan pilihan entri data per halaman (5, 10, 25, 50)
+- 📝 **Log Aktivitas (Audit Log)** — Pencatatan log aktivitas aksi admin secara otomatis
 - 📱 **Fully Responsive** — Tampilan Floating Cards yang optimal di desktop dan mobile
 - 🛡️ **Peningkatan Keamanan** — Dilengkapi proteksi CSRF, password hashing Bcrypt (migrasi otomatis dari MD5), perlindungan session cookie (HTTPOnly), dan penolakan eksekusi script di folder uploads via `.htaccess`
 
@@ -100,17 +102,21 @@ peduli-mahasiswa/
 │   │   ├── Auth.php
 │   │   ├── Dashboard.php
 │   │   ├── Mahasiswa.php
-│   │   └── Bantuan.php
+│   │   ├── Bantuan.php
+│   │   └── Audit_log.php         ← Log aktivitas admin
 │   ├── models/
-│   │   ├── Mahasiswa_model.php
-│   │   └── Bantuan_model.php
+│   │   ├── M_auth.php
+│   │   ├── M_mahasiswa.php
+│   │   ├── M_bantuan.php
+│   │   └── M_audit_log.php       ← Model audit log
 │   ├── views/
 │   │   ├── templates/
 │   │   │   ├── header.php
 │   │   │   └── footer.php
 │   │   ├── dashboard/
 │   │   ├── mahasiswa/
-│   │   └── bantuan/
+│   │   ├── bantuan/
+│   │   └── audit_log/            ← Tampilan tabel log aktivitas
 │   └── core/
 │       └── MY_Controller.php     ← Global auth protection
 ├── system/                       ← CodeIgniter core
@@ -128,6 +134,7 @@ tb_admin          -- Data akun administrator
 tb_mahasiswa      -- Data biodata mahasiswa
 tb_data_ekonomi   -- Data ekonomi keluarga (1:1 dengan mahasiswa)
 tb_bantuan        -- Riwayat bantuan sosial (relasi ke mahasiswa)
+tb_audit_log      -- Log aktivitas audit administrator
 ```
 
 Relasi menggunakan `FOREIGN KEY` dengan `ON DELETE CASCADE`.
